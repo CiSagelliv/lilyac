@@ -1,0 +1,77 @@
+*Action
+    Description
+    Process*
+
+Variable Declaration:
+    .ID
+        Add ID to symbols table
+
+        ... fill with process
+
+    .TYPE
+        Fill type of variables in the symbols table
+
+        ... fill with process x2
+
+Factors:
+    .FACTOR_ID
+        Push last token to factor_pile
+        ? may need to resolve type
+
+    .FACTOR_INT
+        Push last token to factor_pile
+
+    .FACTOR_REAL
+        Push last token to factor_pile
+
+    .FACTOR_CHAR
+        Push last token to factor_pile
+
+    .FACTOR_STR
+        Push last token to factor_pile
+
+Operations:
+    .OPERATOR
+        Push last token to operator_pile
+
+    .OR
+        Evaluate disjunction
+        Push result to factor_pile
+
+    .AND
+        Evaluate conjunction
+        Push result to factor_pile
+
+    .NOT
+        Evaluate negation
+        Push result to factor_pile
+
+    .RELATIONAL
+        Evaluate relation
+        Push result to factor_pile
+
+    .ADDITION
+        Evaluate addition or substraction
+        Push result to factor_pile
+
+    .MULTIPLICATION
+        Evaluate multiplication, division or modulo
+        Push result to factor_pile
+
+    .ASSIGNMENT
+        Evaluate assignment
+
+Statement:
+    .BOTTOM
+        Add false bottom in operator_pile
+
+    .BOTTOM_D
+        Remove false bottom in operator_pile
+
+    .GO_TO_TRUE
+        Generate jump if top of factor_pile has boolean value TRUE
+
+    .GO_TO_FALSE
+        Generate jump if top of factor_pile has boolean value FALSE
+
+IF statement:
