@@ -70,8 +70,23 @@ Statement:
 
     .GO_TO_TRUE
         Generate jump if top of factor_pile has boolean value TRUE
+        Push instruction counter to jump_pile
 
     .GO_TO_FALSE
         Generate jump if top of factor_pile has boolean value FALSE
+        Push instruction counter to jump_pile
 
-IF statement:
+    .GO_TO
+        Generate inconditional jump
+        Push instruction counter to jump_pile
+
+    .FILL_JUMP
+        Pop jump_pile
+        Fill pending jump (go to) wiht following instruction direction
+
+Extra:
+    .READ
+
+    .WRITE
+
+    .ENTER
