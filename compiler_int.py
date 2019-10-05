@@ -13,11 +13,8 @@ class compiler(QDialog):
         self.layout().addLayout(self.head())
         self.layout().addLayout(self.code())
         self.layout().addLayout(self.quadruples())
-        self.layout().addLayout(self.error())
         self.layout().addLayout(self.factor_pile())
-        self.layout().addLayout(self.operator_pile())
         self.layout().addLayout(self.production_pile())
-        self.layout().addLayout(self.jump_pile())
 
         self.setGeometry(0,30,1500,700)
         self.setWindowTitle('Compiler')
@@ -36,7 +33,7 @@ class compiler(QDialog):
         btn_analyze_code = QPushButton('Analyze', self)
         btn_analyze_code.clicked.connect(self.go_to_analyze)
 
-        head_layout = QHBoxLayout()
+        head_layout = QVBoxLayout()
         head_layout.addWidget(btn_open_file)
         head_layout.addWidget(btn_edit_text)
         head_layout.addWidget(btn_save_changes)
@@ -45,25 +42,59 @@ class compiler(QDialog):
         return head_layout
 
     def code(self):
-        pass
+        lb_code = QLabel("Code")
+        txt_code = QPlainTextEdit()
+
+        code_layout = QVBoxLayout()
+        code_layout.addWidget(lb_code)
+        code_layout.addWidget(txt_code)
+
+        return code_layout
 
     def quadruples(self):
-        pass
+        lb_quadruples = QLabel("Quadruples")
+        txt_quad = QPlainTextEdit()
 
-    def error(self):
-        pass
+        lb_error = QLabel("Error")
+        txt_error = QPlainTextEdit()
+
+        quad_layout = QVBoxLayout()
+        quad_layout.addWidget(lb_quadruples)
+        quad_layout.addWidget(txt_quad)
+        quad_layout.addWidget(lb_error)
+        quad_layout.addWidget(txt_error)
+
+        return quad_layout
 
     def factor_pile(self):
-        pass
+        lb_factor = QLabel("factor_pile")
+        txt_factor = QPlainTextEdit()
 
-    def operator_pile(self):
-        pass
+        lb_operator = QLabel("operator_pile")
+        txt_operator = QPlainTextEdit()
+
+        factor_layout = QVBoxLayout()
+        factor_layout.addWidget(lb_factor)
+        factor_layout.addWidget(txt_factor)
+        factor_layout.addWidget(lb_operator)
+        factor_layout.addWidget(txt_operator)
+
+        return factor_layout
 
     def production_pile(self):
-        pass
+        lb_production = QLabel("production_pile")
+        txt_production = QPlainTextEdit()
 
-    def jump_pile(self):
-        pass
+        lb_jump = QLabel("jump_pile")
+        txt_jump = QPlainTextEdit()
+
+        production_layout = QVBoxLayout()
+        production_layout.addWidget(lb_production)
+        production_layout.addWidget(txt_production)
+        production_layout.addWidget(lb_jump)
+        production_layout.addWidget(txt_jump)
+
+        return production_layout
 
     def go_to_open(self):
         pass
