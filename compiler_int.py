@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit)
+from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog)
 import os
+
 
 class compiler(QDialog):
     def __init__(self):
@@ -43,11 +44,11 @@ class compiler(QDialog):
 
     def code(self):
         lb_code = QLabel("Code")
-        txt_code = QPlainTextEdit()
+        self.txt_code = QPlainTextEdit()
 
         code_layout = QVBoxLayout()
         code_layout.addWidget(lb_code)
-        code_layout.addWidget(txt_code)
+        code_layout.addWidget(self.txt_code)
 
         return code_layout
 
@@ -97,10 +98,16 @@ class compiler(QDialog):
         return production_layout
 
     def go_to_open(self):
-        pass
+        self.txt_code.setReadOnly(True)
+        filename = QFileDialog.getOpenFileName(self, "Open file", "/Documents")
+        if filename[0]:
+            f = open(filename[0], "r", encoding="utf8")
+            with f:
+                data = f.read()
+                self.txt_code.appendPlainText(data)
 
     def go_to_edit(self):
-        pass
+        self.txt_code.setReadOnly(False)
 
     def go_to_save(self):
         pass
