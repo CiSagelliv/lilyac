@@ -1,6 +1,6 @@
 from typing import List
-import Compiler
-from Compiler import Error, predictions, derivations
+import lilyac
+from lilyac import Error
 
 
 class Parser:
@@ -9,8 +9,8 @@ class Parser:
 
     def __init__(self):
         self.symbols = [
-            Token(Compiler.END_OF_FILE, '$'),
-            Symbol(Compiler.PROGRAM),
+            Token(lilyac.END_OF_FILE, '$'),
+            Symbol(lilyac.PROGRAM),
         ]
 
     def step(self, token):
@@ -19,20 +19,20 @@ class Parser:
             if top == token:
                 return top
             elif top.terminal:
-                return Error(Compiler.ERROREXPECT,
+                return Error(lilyac.ERROREXPECT,
                              expected=str(top), found=str(token))
             else:
                 column = Parser.hash_token(top)
                 row = top.grammeme
-                production = predictions[row][column]
+                production = lilyac.predictions[row][column]
                 if production < 600:
-                    symbols += derivations.get(production, [])
+                    symbols += lilyac.derivations.get(production, [])
                 else:
-                    return Error(Compiler.ERRORDERIVE)
+                    return Error(lilyac.ERRORDERIVE)
 
     @staticmethod
     def hash_token(token):
-        if token.grammeme == Compiler.RESERVED:
+        if token.grammeme == lilyac.RESERVED:
             if (token.lexeme == 'class'):
                 return 0
             elif token.lexeme == 'begin':
@@ -89,73 +89,73 @@ class Parser:
                 return 26
             else:
                 return 699
-        if token.grammeme == Compiler.IDENTIFIER:
+        if token.grammeme == lilyac.IDENTIFIER:
             return 27
-        if token.grammeme == Compiler.LIBRARY:
+        if token.grammeme == lilyac.LIBRARY:
             return 28
-        if token.grammeme == Compiler.COMMENTARY:
+        if token.grammeme == lilyac.COMMENTARY:
             return 29
-        if token.grammeme == Compiler.INTEGER:
+        if token.grammeme == lilyac.INTEGER:
             return 30
-        if token.grammeme == Compiler.FLOAT:
+        if token.grammeme == lilyac.FLOAT:
             return 31
-        if token.grammeme == Compiler.FLOATSCI:
+        if token.grammeme == lilyac.FLOATSCI:
             return 32
-        if token.grammeme == Compiler.CHARACTER:
+        if token.grammeme == lilyac.CHARACTER:
             return 33
-        if token.grammeme == Compiler.STRING:
+        if token.grammeme == lilyac.STRING:
             return 34
-        if token.grammeme == Compiler.TIMES_SIGN:
+        if token.grammeme == lilyac.TIMES_SIGN:
             return 35
-        if token.grammeme == Compiler.OVER_SIGN:
+        if token.grammeme == lilyac.OVER_SIGN:
             return 36
-        if token.grammeme == Compiler.PLUS_SIGN:
+        if token.grammeme == lilyac.PLUS_SIGN:
             return 37
-        if token.grammeme == Compiler.MINUS_SIGN:
+        if token.grammeme == lilyac.MINUS_SIGN:
             return 38
-        if token.grammeme == Compiler.MODULO:
+        if token.grammeme == lilyac.MODULO:
             return 39
-        if token.grammeme == Compiler.OR:
+        if token.grammeme == lilyac.OR:
             return 40
-        if token.grammeme == Compiler.AND:
+        if token.grammeme == lilyac.AND:
             return 41
-        if token.grammeme == Compiler.NOT:
+        if token.grammeme == lilyac.NOT:
             return 42
-        if token.grammeme == Compiler.LESSTHAN:
+        if token.grammeme == lilyac.LESSTHAN:
             return 43
-        if token.grammeme == Compiler.LESSEQUALS:
+        if token.grammeme == lilyac.LESSEQUALS:
             return 44
-        if token.grammeme == Compiler.GREATERTHAN:
+        if token.grammeme == lilyac.GREATERTHAN:
             return 45
-        if token.grammeme == Compiler.GREATEREQUALS:
+        if token.grammeme == lilyac.GREATEREQUALS:
             return 46
-        if token.grammeme == Compiler.EQUALS:
+        if token.grammeme == lilyac.EQUALS:
             return 47
-        if token.grammeme == Compiler.NEQUALS:
+        if token.grammeme == lilyac.NEQUALS:
             return 48
-        if token.grammeme == Compiler.EQUAL_SIGN:
+        if token.grammeme == lilyac.EQUAL_SIGN:
             return 49
-        if token.grammeme == Compiler.POINT:
+        if token.grammeme == lilyac.POINT:
             return 50
-        if token.grammeme == Compiler.COMMA:
+        if token.grammeme == lilyac.COMMA:
             return 51
-        if token.grammeme == Compiler.COLON:
+        if token.grammeme == lilyac.COLON:
             return 52
-        if token.grammeme == Compiler.SEMICOLON:
+        if token.grammeme == lilyac.SEMICOLON:
             return 53
-        if token.grammeme == Compiler.PARENTHESISOPEN:
+        if token.grammeme == lilyac.PARENTHESISOPEN:
             return 54
-        if token.grammeme == Compiler.PARENTHESISCLOSE:
+        if token.grammeme == lilyac.PARENTHESISCLOSE:
             return 55
-        if token.grammeme == Compiler.BRACKETSOPEN:
+        if token.grammeme == lilyac.BRACKETSOPEN:
             return 56
-        if token.grammeme == Compiler.BRACKETSCLOSE:
+        if token.grammeme == lilyac.BRACKETSCLOSE:
             return 57
-        if token.grammeme == Compiler.SQUAREBOPEN:
+        if token.grammeme == lilyac.SQUAREBOPEN:
             return 58
-        if token.grammeme == Compiler.SQUAREBCLOSE:
+        if token.grammeme == lilyac.SQUAREBCLOSE:
             return 59
-        if token.grammeme == Compiler.END_OF_FILE:
+        if token.grammeme == lilyac.END_OF_FILE:
             return 60
         else:
             return 699

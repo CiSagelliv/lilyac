@@ -18,7 +18,7 @@ class compiler(QDialog):
         self.layout().addLayout(self.production_pile())
 
         self.setGeometry(0,30,1500,700)
-        self.setWindowTitle('Compiler')
+        self.setWindowTitle('lilyac')
         self.show()
 
     def head(self):

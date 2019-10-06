@@ -1,4 +1,4 @@
-import Compiler
+import lilyac
 from enum import Enum, auto
 
 
@@ -97,7 +97,7 @@ class Token(Symbol):
 
     def __repr__(self):
         grammeme = ''
-        if token.grammeme == Compiler.RESERVED:
+        if token.grammeme == lilyac.RESERVED:
             if (token.lexeme == 'class'):
                 grammeme = 'Reserved word: class'
             elif token.lexeme == 'begin':
@@ -152,73 +152,73 @@ class Token(Symbol):
                 grammeme = 'Reserved word: enter'
             elif token.lexeme == 'principal':
                 grammeme = 'Reserved word: principal'
-        if token.grammeme == Compiler.IDENTIFIER:
+        if token.grammeme == lilyac.IDENTIFIER:
             grammeme = 'Identifier'
-        if token.grammeme == Compiler.LIBRARY:
+        if token.grammeme == lilyac.LIBRARY:
             grammeme = 'Library identifier'
-        if token.grammeme == Compiler.COMMENTARY:
+        if token.grammeme == lilyac.COMMENTARY:
             grammeme = 'Commentary'
-        if token.grammeme == Compiler.INTEGER:
+        if token.grammeme == lilyac.INTEGER:
             grammeme = 'Integer value'
-        if token.grammeme == Compiler.FLOAT:
+        if token.grammeme == lilyac.FLOAT:
             grammeme = 'Floating point value'
-        if token.grammeme == Compiler.FLOATSCI:
+        if token.grammeme == lilyac.FLOATSCI:
             grammeme = 'Floating point value, scientific notation'
-        if token.grammeme == Compiler.CHARACTER:
+        if token.grammeme == lilyac.CHARACTER:
             grammeme = 'Character'
-        if token.grammeme == Compiler.STRING:
+        if token.grammeme == lilyac.STRING:
             grammeme = 'String'
-        if token.grammeme == Compiler.TIMES_SIGN:
+        if token.grammeme == lilyac.TIMES_SIGN:
             grammeme = 'Multiplication arithmetic operator'
-        if token.grammeme == Compiler.OVER_SIGN:
+        if token.grammeme == lilyac.OVER_SIGN:
             grammeme = 'Division arithmetic operator'
-        if token.grammeme == Compiler.PLUS_SIGN:
+        if token.grammeme == lilyac.PLUS_SIGN:
             grammeme = 'Addition arithmetic operator'
-        if token.grammeme == Compiler.MINUS_SIGN:
+        if token.grammeme == lilyac.MINUS_SIGN:
             grammeme = 'Substraction arithmetic operator'
-        if token.grammeme == Compiler.MODULO:
+        if token.grammeme == lilyac.MODULO:
             grammeme = 'Modulo sign'
-        if token.grammeme == Compiler.OR:
+        if token.grammeme == lilyac.OR:
             grammeme = 'OR logical operator'
-        if token.grammeme == Compiler.AND:
+        if token.grammeme == lilyac.AND:
             grammeme = 'AND logical operator'
-        if token.grammeme == Compiler.NOT:
+        if token.grammeme == lilyac.NOT:
             grammeme = 'NOT logical operator'
-        if token.grammeme == Compiler.LESSTHAN:
+        if token.grammeme == lilyac.LESSTHAN:
             grammeme = 'Less than relational operator'
-        if token.grammeme == Compiler.LESSEQUALS:
+        if token.grammeme == lilyac.LESSEQUALS:
             grammeme = 'Less than or equal relational operator'
-        if token.grammeme == Compiler.GREATERTHAN:
+        if token.grammeme == lilyac.GREATERTHAN:
             grammeme = 'Greater than relational operator'
-        if token.grammeme == Compiler.GREATEREQUALS:
+        if token.grammeme == lilyac.GREATEREQUALS:
             grammeme = 'Greater than or equal relational operator'
-        if token.grammeme == Compiler.EQUALS:
+        if token.grammeme == lilyac.EQUALS:
             grammeme = 'Equals relational operator'
-        if token.grammeme == Compiler.NEQUALS:
+        if token.grammeme == lilyac.NEQUALS:
             grammeme = 'Not equals relational operator'
-        if token.grammeme == Compiler.EQUAL_SIGN:
+        if token.grammeme == lilyac.EQUAL_SIGN:
             grammeme = 'Equals sign'
-        if token.grammeme == Compiler.POINT:
+        if token.grammeme == lilyac.POINT:
             grammeme = 'Point'
-        if token.grammeme == Compiler.COMMA:
+        if token.grammeme == lilyac.COMMA:
             grammeme = 'Comma'
-        if token.grammeme == Compiler.COLON:
+        if token.grammeme == lilyac.COLON:
             grammeme = 'Colon'
-        if token.grammeme == Compiler.SEMICOLON:
+        if token.grammeme == lilyac.SEMICOLON:
             grammeme = 'Semicolon'
-        if token.grammeme == Compiler.PARENTHESISOPEN:
+        if token.grammeme == lilyac.PARENTHESISOPEN:
             grammeme = 'Left parenthesis'
-        if token.grammeme == Compiler.PARENTHESISCLOSE:
+        if token.grammeme == lilyac.PARENTHESISCLOSE:
             grammeme = 'Right parenthesis'
-        if token.grammeme == Compiler.BRACKETSOPEN:
+        if token.grammeme == lilyac.BRACKETSOPEN:
             grammeme = 'Left bracket'
-        if token.grammeme == Compiler.BRACKETSCLOSE:
+        if token.grammeme == lilyac.BRACKETSCLOSE:
             grammeme = 'Right bracket'
-        if token.grammeme == Compiler.SQUAREBOPEN:
+        if token.grammeme == lilyac.SQUAREBOPEN:
             grammeme = 'Left square bracket'
-        if token.grammeme == Compiler.SQUAREBCLOSE:
+        if token.grammeme == lilyac.SQUAREBCLOSE:
             grammeme = 'Right square bracket'
-        if token.grammeme == Compiler.END_OF_FILE:
+        if token.grammeme == lilyac.END_OF_FILE:
             grammeme = 'End of file'
         if self.lexeme:
             return f'<{grammeme}, {self.lexeme}>'
@@ -240,113 +240,113 @@ class Error(Symbol):
             self.found = kwargs['found']
 
     def __repr__(self):
-        if self.grammeme == Compiler.ERRORIDENTIFIER:
+        if self.grammeme == lilyac.ERRORIDENTIFIER:
             return 'Lexical Error: Malformed identifier'
-        elif self.grammeme == Compiler.ERRORLIBRARY:
+        elif self.grammeme == lilyac.ERRORLIBRARY:
             return 'Lexical Error: Unknown library'
-        elif self.grammeme == Compiler.ERRORFLOAT:
+        elif self.grammeme == lilyac.ERRORFLOAT:
             return 'Lexical Error: It is not a float number'
-        elif self.grammeme == Compiler.ERRORFLOATSCI:
+        elif self.grammeme == lilyac.ERRORFLOATSCI:
             return 'Lexical Error: It is not a scientific notation'
-        elif self.grammeme == Compiler.ERRORCHAR:
+        elif self.grammeme == lilyac.ERRORCHAR:
             return 'Lexical Error: It is not a character'
-        elif self.grammeme == Compiler.ERROROR:
+        elif self.grammeme == lilyac.ERROROR:
             return 'Lexical Error: It is not an OR'
-        elif self.grammeme == Compiler.ERRORAND:
+        elif self.grammeme == lilyac.ERRORAND:
             return 'Lexical Error: It is not and AND'
-        elif self.grammeme == Compiler.ERRORUNKNOWN:
+        elif self.grammeme == lilyac.ERRORUNKNOWN:
             return 'Lexical Error: Unknown error'
-        elif self.grammeme == Compiler.ERRORPH_0:
+        elif self.grammeme == lilyac.ERRORPH_0:
             return 'Syntax Error: Program’s head: '
             + 'The program must start with either library declaration or class'
-        elif self.grammeme == Compiler.ERRORPH_1:
+        elif self.grammeme == lilyac.ERRORPH_1:
             return 'Syntax Error: Program’s head: '
             + 'Expected class definition or the import of a library'
-        elif self.grammeme == Compiler.ERROREVD:
+        elif self.grammeme == lilyac.ERROREVD:
             return 'Syntax Error: '
             + 'Expected variable declaration or a valid statement'
-        elif self.grammeme == Compiler.ERROREVID:
+        elif self.grammeme == lilyac.ERROREVID:
             return 'Syntax Error: Variables: Expected a variable identifier'
-        elif self.grammeme == Compiler.ERRORVARD:
+        elif self.grammeme == lilyac.ERRORVARD:
             return 'Syntax Error: Variables declaration: '
             + 'Expected a , or the “as” reserved word'
-        elif self.grammeme == Compiler.ERRORINVTY:
+        elif self.grammeme == lilyac.ERRORINVTY:
             return 'Syntax Error: Type specification: Invalid type'
-        elif self.grammeme == Compiler.ERROREVST:
+        elif self.grammeme == lilyac.ERROREVST:
             return 'Syntax Error: '
             + 'Expected a valid statement or the “end” reserved word'
-        elif self.grammeme == Compiler.ERRORISOST_O:
+        elif self.grammeme == lilyac.ERRORISOST_O:
             return 'Syntax Error: Statement: Invalid start of statement'
-        elif self.grammeme == Compiler.ERRORISOST_1:
+        elif self.grammeme == lilyac.ERRORISOST_1:
             return 'Syntax Error: Assignment: '
             + 'Invalid start of assignment statement'
-        elif self.grammeme == Compiler.ERRORISOEX_0:
+        elif self.grammeme == lilyac.ERRORISOEX_0:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_0:
+        elif self.grammeme == lilyac.ERRORINVE_0:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter or a disjunction'
-        elif self.grammeme == Compiler.ERRORISOEX_1:
+        elif self.grammeme == lilyac.ERRORISOEX_1:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_1:
+        elif self.grammeme == lilyac.ERRORINVE_1:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter or a logical operation'
-        elif self.grammeme == Compiler.ERRORISOEX_2:
+        elif self.grammeme == lilyac.ERRORISOEX_2:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_2:
+        elif self.grammeme == lilyac.ERRORINVE_2:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter or a logical negation'
-        elif self.grammeme == Compiler.ERRORISOEX_3:
+        elif self.grammeme == lilyac.ERRORISOEX_3:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_3:
+        elif self.grammeme == lilyac.ERRORINVE_3:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter, '
             + 'a logical operation or a relational operator'
-        elif self.grammeme == Compiler.ERRORINVE_4:
+        elif self.grammeme == lilyac.ERRORINVE_4:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a relational operator'
-        elif self.grammeme == Compiler.ERRORISOEX_4:
+        elif self.grammeme == lilyac.ERRORISOEX_4:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_5:
+        elif self.grammeme == lilyac.ERRORINVE_5:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter, a logical operation, '
             + 'a relational operator or an arithmetic addition'
-        elif self.grammeme == Compiler.ERRORISOEX_5:
+        elif self.grammeme == lilyac.ERRORISOEX_5:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORINVE_6:
+        elif self.grammeme == lilyac.ERRORINVE_6:
             return 'Syntax Error: Expression: '
             + 'Invalid expression, expected a delimiter, a logical operation, '
             + 'a relational operator or an arithmetic operation'
-        elif self.grammeme == Compiler.ERRORISOEX_6:
+        elif self.grammeme == lilyac.ERRORISOEX_6:
             return 'Syntax Error: Expression: Invalid start of expression'
-        elif self.grammeme == Compiler.ERRORIFST_1:
+        elif self.grammeme == lilyac.ERRORIFST_1:
             return 'Syntax Error: If statement: '
             + 'Expected the reserved word "if"'
-        elif self.grammeme == Compiler.ERRORIFST_2:
+        elif self.grammeme == lilyac.ERRORIFST_2:
             return 'Syntax Error: If statement: '
             + 'Expected the reserved word "else" or "endif"'
-        elif self.grammeme == Compiler.ERRORWHLOOP:
+        elif self.grammeme == lilyac.ERRORWHLOOP:
             return 'Syntax Error: While loop: '
             + 'Expected the reserved word “while”'
-        elif self.grammeme == Compiler.ERRORFOR:
+        elif self.grammeme == lilyac.ERRORFOR:
             return 'Syntax Error: For loop: Expected the reserved word “while”'
-        elif self.grammeme == Compiler.ERROREXIN_0:
+        elif self.grammeme == lilyac.ERROREXIN_0:
             return 'Syntax Error: Expressions: Invalid start of expression'
-        elif self.grammeme == Compiler.ERROREXIN_1:
+        elif self.grammeme == lilyac.ERROREXIN_1:
             return 'Syntax Error: Expressions: '
             + 'Invalid expressions, expected a , or a closing parenthesis'
-        elif self.grammeme == Compiler.ERRORREAD:
+        elif self.grammeme == lilyac.ERRORREAD:
             return 'Syntax Error: Read instruction: '
             + 'Expected the reserved word “read”'
-        elif self.grammeme == Compiler.ERRORWRITE:
+        elif self.grammeme == lilyac.ERRORWRITE:
             return 'Syntax Error: Write instruction: '
             + 'Expected the reserved word “write”'
-        elif self.grammeme == Compiler.ERRORENTER:
+        elif self.grammeme == lilyac.ERRORENTER:
             return 'Syntax Error: Enter statement: '
             + 'Expected the reserved word “enter”'
-        elif self.grammeme == Compiler.ERROREXPECT:
+        elif self.grammeme == lilyac.ERROREXPECT:
             return 'Syntax Error: '
             + f'Expected a {self.expected}, but found: {self.found}'
-        elif self.grammeme == Compiler.ERRORDERIVE:
+        elif self.grammeme == lilyac.ERRORDERIVE:
             return 'Syntax Error: Invalid derivation'
         elif ...:
             ...
@@ -362,54 +362,54 @@ class SemanticAction(Symbol):
     def __init__(self, grammeme: int):
         super().__init__(grammeme)
 
-    def __call__(self, im: Intermediate):
-        if self.grammeme == Compiler._ID:
+    def __call__(self, im):
+        if self.grammeme == lilyac._ID:
             pass
-        elif self.grammeme == Compiler._TYPE:
+        elif self.grammeme == lilyac._TYPE:
             pass
-        elif self.grammeme == Compiler._FACTOR_ID:
+        elif self.grammeme == lilyac._FACTOR_ID:
             pass
-        elif self.grammeme == Compiler._FACTOR_INT:
+        elif self.grammeme == lilyac._FACTOR_INT:
             pass
-        elif self.grammeme == Compiler._FACTOR_REAL:
+        elif self.grammeme == lilyac._FACTOR_REAL:
             pass
-        elif self.grammeme == Compiler._FACTOR_CHAR:
+        elif self.grammeme == lilyac._FACTOR_CHAR:
             pass
-        elif self.grammeme == Compiler._FACTOR_STR:
+        elif self.grammeme == lilyac._FACTOR_STR:
             pass
-        elif self.grammeme == Compiler._OPERATOR:
+        elif self.grammeme == lilyac._OPERATOR:
             pass
-        elif self.grammeme == Compiler._OR:
+        elif self.grammeme == lilyac._OR:
             pass
-        elif self.grammeme == Compiler._AND:
+        elif self.grammeme == lilyac._AND:
             pass
-        elif self.grammeme == Compiler._NOT:
+        elif self.grammeme == lilyac._NOT:
             pass
-        elif self.grammeme == Compiler._RELATIONAL:
+        elif self.grammeme == lilyac._RELATIONAL:
             pass
-        elif self.grammeme == Compiler._ADDITION:
+        elif self.grammeme == lilyac._ADDITION:
             pass
-        elif self.grammeme == Compiler._MULTIPLICATION:
+        elif self.grammeme == lilyac._MULTIPLICATION:
             pass
-        elif self.grammeme == Compiler._ASSIGNMENT:
+        elif self.grammeme == lilyac._ASSIGNMENT:
             pass
-        elif self.grammeme == Compiler._BOTTOM:
+        elif self.grammeme == lilyac._BOTTOM:
             pass
-        elif self.grammeme == Compiler._BOTTOM_D:
+        elif self.grammeme == lilyac._BOTTOM_D:
             pass
-        elif self.grammeme == Compiler._GO_TO_TRUE:
+        elif self.grammeme == lilyac._GO_TO_TRUE:
             pass
-        elif self.grammeme == Compiler._GO_TO_FALSE:
+        elif self.grammeme == lilyac._GO_TO_FALSE:
             pass
-        elif self.grammeme == Compiler._GO_TO:
+        elif self.grammeme == lilyac._GO_TO:
             pass
-        elif self.grammeme == Compiler._FILL_JUMP:
+        elif self.grammeme == lilyac._FILL_JUMP:
             pass
-        elif self.grammeme == Compiler._READ:
+        elif self.grammeme == lilyac._READ:
             pass
-        elif self.grammeme == Compiler._WRITE:
+        elif self.grammeme == lilyac._WRITE:
             pass
-        elif self.grammeme == Compiler._ENTER:
+        elif self.grammeme == lilyac._ENTER:
             pass
 
 

@@ -1,6 +1,6 @@
 from typing import List
-import Compiler
-from Compiler import Token, Error, transitions, reserved_words, END_OF_FILE
+import lilyac
+from lilyac import Token, Error
 
 
 class Lexer:
@@ -14,7 +14,7 @@ class Lexer:
 
     def step(self, symbol: str):
         column = Lexer.hash_symbol(symbol)
-        self.state = transitions[self.state][column]
+        self.state = lilyac.transitions[self.state][column]
 
     def generate_token(self, index: int, text: str):
         self.restart()
@@ -26,16 +26,16 @@ class Lexer:
                 self.lexeme += text[index]
             index += 1
         if index == len(text):
-            return Token(END_OF_FILE)
+            return Token(lilyac.END_OF_FILE)
         if self.is_final():
             self.lexeme += text[index]
         else:
             index -= 1
-        if self.is_valid() and self.state == Compiler.RESERVED:
-            if self.lexeme in reserved_words:
-                self.state = Compiler.RESERVED
+        if self.is_valid() and self.state == lilyac.RESERVED:
+            if self.lexeme in lilyac.reserved_words:
+                self.state = lilyac.RESERVED
             else:
-                self.state = Compiler.IDENTIFIER
+                self.state = lilyac.IDENTIFIER
         token = Token(self.state, self.lexeme)
         return token, index
 
@@ -43,19 +43,19 @@ class Lexer:
         return self.state >= 100
 
     def is_final(self):
-        return (self.state == Compiler.LIBRARY
-                or self.state == Compiler.COMMENTARY
-                or self.state == Compiler.CHARACTER
-                or self.state == Compiler.STRING
-                or self.state == Compiler.COMMA
-                or self.state == Compiler.SEMICOLON
-                or self.state == Compiler.PARENTHESISOPEN
-                or self.state == Compiler.PARENTHESISCLOSE
-                or self.state == Compiler.BRACKETSOPEN
-                or self.state == Compiler.BRACKETSCLOSE
-                or self.state == Compiler.SQUAREBOPEN
-                or self.state == Compiler.SQUAREBCLOSE
-                or self.state == Compiler.ERRORUNKNOWNL)
+        return (self.state == lilyac.LIBRARY
+                or self.state == lilyac.COMMENTARY
+                or self.state == lilyac.CHARACTER
+                or self.state == lilyac.STRING
+                or self.state == lilyac.COMMA
+                or self.state == lilyac.SEMICOLON
+                or self.state == lilyac.PARENTHESISOPEN
+                or self.state == lilyac.PARENTHESISCLOSE
+                or self.state == lilyac.BRACKETSOPEN
+                or self.state == lilyac.BRACKETSCLOSE
+                or self.state == lilyac.SQUAREBOPEN
+                or self.state == lilyac.SQUAREBCLOSE
+                or self.state == lilyac.ERRORUNKNOWNL)
 
     def is_valid(self):
         return self.state < 500

@@ -1,7 +1,6 @@
 from typing import List, Tuple, Dict
-import operator
 
-from Compiler import Token, Error, SemanticAction, Type
+from lilyac import Token, Error, SemanticAction, Type
 
 
 class Intermediate:
@@ -51,27 +50,27 @@ class Intermediate:
             symbols_table[result] = type_r
             return
         else:
-            return Error(Compiler.ERRORTYPEOP)
+            return Error(lilyac.ERRORTYPEOP)
 
 
 unary_operators = {
-    r'!': operator.not_,
-    'SF': Type.JF,
+    r'!': lambda x: not x,
+    'JF': Type.JF,
     # Add rest of operations
 }
 
 binary_operators = {
-    r'+': operator.add,
-    r'-': operator.sub,
-    r'*': operator.mul,
-    r'/': operator.truediv,
-    r'%': operator.mod,
-    r'||': operator.or_,
-    r'&&': operator.and_,
-    r'<': operator.lt,
-    r'<=': operator.lte,
-    r'>': operator.gt,
-    r'>=': operator.gte,
-    r'==': operator.eq,
-    r'!=': operator.ne,
+    r'+': lambda x, y: x + y,
+    r'-': lambda x, y: x - y,
+    r'*': lambda x, y: x * y,
+    r'/': lambda x, y: x / y,
+    r'%': lambda x, y: x % y,
+    r'||': lambda x, y: x or y,
+    r'&&': lambda x, y: x and y,
+    r'<': lambda x, y: x < y,
+    r'<=': lambda x, y: x <= y,
+    r'>': lambda x, y: x > y,
+    r'>=': lambda x, y: x >= y,
+    r'==': lambda x, y: x == y,
+    r'!=': lambda x, y: x != y,
 }
