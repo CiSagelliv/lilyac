@@ -163,11 +163,13 @@ derivations: Dict = {
         Symbol(VARIABLES),
         Token(RESERVED, 'as'),
         Symbol(TYPE),
+        SemanticAction(.TYPE),
         Token(SEMICOLON, ';'),
         Symbol(DECL_VARIABLES),
     ],
     5: [
         Token(IDENTIFIER),
+        SemanticAction(.ID),
         Symbol(MORE_VARIABLES),
     ],
     6: [
@@ -218,7 +220,9 @@ derivations: Dict = {
     22: [
         Token(IDENTIFIER),
         Token(EQUAL_SIGN, '='),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_0),
+        SemanticAction(.ASSIGNMENT),
     ],
     23: [
         Symbol(EXPRESSION_1),
@@ -226,7 +230,9 @@ derivations: Dict = {
     ],
     24: [
         Token(OR, '||'),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_0),
+        SemanticAction(.OR),
     ],
     26: [
         Symbol(EXPRESSION_2),
@@ -234,14 +240,18 @@ derivations: Dict = {
     ],
     27: [
         Token(AND, '&&'),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_1),
+        SemanticAction(.AND),
     ],
     29: [
         Symbol(NEGATION),
         Symbol(EXPRESSION_3),
+        SemanticAction(.NOT),
     ],
     30: [
         Token(NOT, '!'),
+        SemanticAction(.OPERATOR),
     ],
     32: [
         Symbol(EXPRESSION_4),
@@ -249,7 +259,9 @@ derivations: Dict = {
     ],
     33: [
         Symbol(RELATIONAL_OPERATOR),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_4),
+        SemanticAction(.RELATIONAL),
     ],
     35: [
         Token(EQUALS, '=='),
@@ -275,11 +287,15 @@ derivations: Dict = {
     ],
     42: [
         Token(PLUS_SIGN, '+'),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_4),
+        SemanticAction(.ADDITION),
     ],
     43: [
         Token(MINUS_SIGN, '-'),
+        SemanticAction(.OPERATOR),
         Symbol(EXPRESSION_4),
+        SemanticAction(.ADDITION),
     ],
     45: [
         Symbol(FACTOR),
@@ -287,50 +303,68 @@ derivations: Dict = {
     ],
     46: [
         Token(TIMES_SIGN, '*'),
+        SemanticAction(.OPERATOR),
         Symbol(ADDEND),
+        SemanticAction(.MULTIPLICATION),
     ],
     47: [
         Token(OVER_SIGN, '/'),
+        SemanticAction(.OPERATOR),
         Symbol(ADDEND),
+        SemanticAction(.MULTIPLICATION),
     ],
     48: [
         Token(MODULO, '%'),
+        SemanticAction(.OPERATOR),
         Symbol(ADDEND),
+        SemanticAction(.MULTIPLICATION),
     ],
     50: [
         Token(IDENTIFIER),
+        SemanticAction(.FACTOR_ID),
     ],
     51: [
         Token(INTEGER),
+        SemanticAction(.FACTOR_INT),
     ],
     52: [
         Token(FLOAT),
+        SemanticAction(.FACTOR_REAL),
     ],
     53: [
         Token(FLOATSCI),
+        SemanticAction(.FACTOR_REAL),
     ],
     54: [
         Token(CHARACTER),
+        SemanticAction(.FACTOR_CHAR),
     ],
     55: [
         Token(STRING),
+        SemanticAction(.FACTOR_STR),
     ],
     56: [
         Token(PARENTHESISOPEN, '('),
+        SemanticAction(.BOTTOM),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.BOTTOM_D),
     ],
     57: [
         Token(RESERVED, 'if'),
+        SemanticAction(.BOTTOM),
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.GO_TO_FALSE),
         Symbol(STATEMENTS),
         Symbol(ELSE),
         Token(RESERVED, 'endif'),
+        SemanticAction(.FILL_JUMP),
     ],
     58: [
         Token(RESERVED, 'else'),
+        SemanticAction(.GO_TO),
         Symbol(STATEMENTS),
     ],
     60: [
@@ -338,8 +372,10 @@ derivations: Dict = {
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.GO_TO_TRUE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
+        SemanticAction(.GO_TO),
     ],
     61: [
         Token(RESERVED, 'for'),
@@ -348,8 +384,10 @@ derivations: Dict = {
         Token(COLON, ':'),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.GO_TO_TRUE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endfor'),
+        SemanticAction(.GO_TO),
     ],
     62: [
         Symbol(EXPRESSION_0),
@@ -364,14 +402,17 @@ derivations: Dict = {
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSIONS),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.READ),
     ],
     66: [
         Token(RESERVED, 'write'),
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSIONS),
         Token(PARENTHESISCLOSE, ')'),
+        SemanticAction(.WRITE),
     ],
     67: [
         Token(RESERVED, 'enter'),
+        SemanticAction(.ENTER),
     ],
 }
