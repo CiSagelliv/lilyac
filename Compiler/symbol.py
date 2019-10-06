@@ -1,5 +1,4 @@
 import Compiler
-from Compiler import derivations
 
 
 class Symbol:
@@ -241,91 +240,115 @@ class Error(Symbol):
 
     def __repr__(self):
         if self.grammeme == Compiler.ERRORIDENTIFIER:
-            return "Lexical Error: Malformed identifier"
+            return 'Lexical Error: Malformed identifier'
         elif self.grammeme == Compiler.ERRORLIBRARY:
-            return "Lexical Error: Unknown library"
+            return 'Lexical Error: Unknown library'
         elif self.grammeme == Compiler.ERRORFLOAT:
-            return "Lexical Error: It is not a float number"
+            return 'Lexical Error: It is not a float number'
         elif self.grammeme == Compiler.ERRORFLOATSCI:
-            return "Lexical Error: It is not a scientific notation"
+            return 'Lexical Error: It is not a scientific notation'
         elif self.grammeme == Compiler.ERRORCHAR:
-            return "Lexical Error: It is not a character"
+            return 'Lexical Error: It is not a character'
         elif self.grammeme == Compiler.ERROROR:
-            return "Lexical Error: It is not an OR"
+            return 'Lexical Error: It is not an OR'
         elif self.grammeme == Compiler.ERRORAND:
-            return "Lexical Error: It is not and AND"
+            return 'Lexical Error: It is not and AND'
         elif self.grammeme == Compiler.ERRORUNKNOWN:
-            return "Lexical Error: Unknown error"
+            return 'Lexical Error: Unknown error'
         elif self.grammeme == Compiler.ERRORPH_0:
-            return "Syntax Error: Program’s head: The program must start with either library declaration or class definition"
+            return 'Syntax Error: Program’s head: '
+            + 'The program must start with either library declaration or class'
         elif self.grammeme == Compiler.ERRORPH_1:
-            return "Syntax Error: Program’s head: Expected class definition or the import of a library"
+            return 'Syntax Error: Program’s head: '
+            + 'Expected class definition or the import of a library'
         elif self.grammeme == Compiler.ERROREVD:
-            return "Syntax Error: Expected variable declaration or a valid statement"
+            return 'Syntax Error: '
+            + 'Expected variable declaration or a valid statement'
         elif self.grammeme == Compiler.ERROREVID:
-            return "Syntax Error: Variables: Expected a variable identifier"
+            return 'Syntax Error: Variables: Expected a variable identifier'
         elif self.grammeme == Compiler.ERRORVARD:
-            return "Syntax Error: Variables declaration: Expected a , or the “as” reserved word"
+            return 'Syntax Error: Variables declaration: '
+            + 'Expected a , or the “as” reserved word'
         elif self.grammeme == Compiler.ERRORINVTY:
-            return "Syntax Error: Type specification: Invalid type"
+            return 'Syntax Error: Type specification: Invalid type'
         elif self.grammeme == Compiler.ERROREVST:
-            return "Syntax Error: Expected a valid statement or the “end” reserved word"
+            return 'Syntax Error: '
+            + 'Expected a valid statement or the “end” reserved word'
         elif self.grammeme == Compiler.ERRORISOST_O:
-            return "Syntax Error: Statement: Invalid start of statement"
+            return 'Syntax Error: Statement: Invalid start of statement'
         elif self.grammeme == Compiler.ERRORISOST_1:
-            return "Syntax Error: Assignment: Invalid start of assignment statement"
+            return 'Syntax Error: Assignment: '
+            + 'Invalid start of assignment statement'
         elif self.grammeme == Compiler.ERRORISOEX_0:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_0:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter or a logical disjunction"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter or a disjunction'
         elif self.grammeme == Compiler.ERRORISOEX_1:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_1:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter or a logical operation"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter or a logical operation'
         elif self.grammeme == Compiler.ERRORISOEX_2:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_2:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter or a logical negation"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter or a logical negation'
         elif self.grammeme == Compiler.ERRORISOEX_3:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_3:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter, a logical operation or a relational operator"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter, '
+            + 'a logical operation or a relational operator'
         elif self.grammeme == Compiler.ERRORINVE_4:
-            return "Syntax Error: Expression: Invalid expression, expected a relational operator"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a relational operator'
         elif self.grammeme == Compiler.ERRORISOEX_4:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_5:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter, a logical operation, a relational operator or an arithmetic addition"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter, a logical operation, '
+            + 'a relational operator or an arithmetic addition'
         elif self.grammeme == Compiler.ERRORISOEX_5:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORINVE_6:
-            return "Syntax Error: Expression: Invalid expression, expected a delimiter, a logical operation, a relational operator or an arithmetic operation"
+            return 'Syntax Error: Expression: '
+            + 'Invalid expression, expected a delimiter, a logical operation, '
+            + 'a relational operator or an arithmetic operation'
         elif self.grammeme == Compiler.ERRORISOEX_6:
-            return "Syntax Error: Expression: Invalid start of expression"
+            return 'Syntax Error: Expression: Invalid start of expression'
         elif self.grammeme == Compiler.ERRORIFST_1:
-            return "Syntax Error: If statement: Expected the reserved word “if”"
+            return 'Syntax Error: If statement: '
+            + 'Expected the reserved word "if"'
         elif self.grammeme == Compiler.ERRORIFST_2:
-            return "Syntax Error: If statement: Expected the reserved word “else” or “endif”"
+            return 'Syntax Error: If statement: '
+            + 'Expected the reserved word "else" or "endif"'
         elif self.grammeme == Compiler.ERRORWHLOOP:
-            return "Syntax Error: While loop: Expected the reserved word “while”"
+            return 'Syntax Error: While loop: '
+            + 'Expected the reserved word “while”'
         elif self.grammeme == Compiler.ERRORFOR:
-            return "Syntax Error: For loop: Expected the reserved word “while”";
+            return 'Syntax Error: For loop: Expected the reserved word “while”'
         elif self.grammeme == Compiler.ERROREXIN_0:
-            return "Syntax Error: Expressions: Invalid start of expression"
+            return 'Syntax Error: Expressions: Invalid start of expression'
         elif self.grammeme == Compiler.ERROREXIN_1:
-            return "Syntax Error: Expressions: Invalid expressions, expected a , or a closing parenthesis"
+            return 'Syntax Error: Expressions: '
+            + 'Invalid expressions, expected a , or a closing parenthesis'
         elif self.grammeme == Compiler.ERRORREAD:
-            return "Syntax Error: Read instruction: Expected the reserved word “read”"
+            return 'Syntax Error: Read instruction: '
+            + 'Expected the reserved word “read”'
         elif self.grammeme == Compiler.ERRORWRITE:
-            return "Syntax Error: Write instruction: Expected the reserved word “write”"
+            return 'Syntax Error: Write instruction: '
+            + 'Expected the reserved word “write”'
         elif self.grammeme == Compiler.ERRORENTER:
-            return "Syntax Error: Enter statement: Expected the reserved word “enter”"
+            return 'Syntax Error: Enter statement: '
+            + 'Expected the reserved word “enter”'
         elif self.grammeme == Compiler.ERROREXPECT:
-            return f"Syntax Error: Expected a {self.expected}, but found: {self.found}"
+            return 'Syntax Error: '
+            + f'Expected a {self.expected}, but found: {self.found}'
         elif self.grammeme == Compiler.ERRORDERIVE:
-            return "Syntax Error: Invalid derivation"
+            return 'Syntax Error: Invalid derivation'
         else:
-            return "Unknown error"
+            return 'Unknown error'
 
     def __str__(self):
         return self.__repr__()
@@ -335,3 +358,53 @@ class SemanticAction(Symbol):
 
     def __init__(self, grammeme: int):
         super().__init__(grammeme)
+
+    def __call__(self, im: Intermediate):
+        if self.grammeme == Compiler._ID:
+            pass
+        elif self.grammeme == Compiler._TYPE:
+            pass
+        elif self.grammeme == Compiler._FACTOR_ID:
+            pass
+        elif self.grammeme == Compiler._FACTOR_INT:
+            pass
+        elif self.grammeme == Compiler._FACTOR_REAL:
+            pass
+        elif self.grammeme == Compiler._FACTOR_CHAR:
+            pass
+        elif self.grammeme == Compiler._FACTOR_STR:
+            pass
+        elif self.grammeme == Compiler._OPERATOR:
+            pass
+        elif self.grammeme == Compiler._OR:
+            pass
+        elif self.grammeme == Compiler._AND:
+            pass
+        elif self.grammeme == Compiler._NOT:
+            pass
+        elif self.grammeme == Compiler._RELATIONAL:
+            pass
+        elif self.grammeme == Compiler._ADDITION:
+            pass
+        elif self.grammeme == Compiler._MULTIPLICATION:
+            pass
+        elif self.grammeme == Compiler._ASSIGNMENT:
+            pass
+        elif self.grammeme == Compiler._BOTTOM:
+            pass
+        elif self.grammeme == Compiler._BOTTOM_D:
+            pass
+        elif self.grammeme == Compiler._GO_TO_TRUE:
+            pass
+        elif self.grammeme == Compiler._GO_TO_FALSE:
+            pass
+        elif self.grammeme == Compiler._GO_TO:
+            pass
+        elif self.grammeme == Compiler._FILL_JUMP:
+            pass
+        elif self.grammeme == Compiler._READ:
+            pass
+        elif self.grammeme == Compiler._WRITE:
+            pass
+        elif self.grammeme == Compiler._ENTER:
+            pass
