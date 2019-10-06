@@ -86,6 +86,32 @@ READ: int = 29
 WRITE: int = 30
 ENTER: int = 31
 
+#Semantic actions
+.ID: int = 701
+.TYPE: int = 702
+.FACTOR_ID: int = 703
+.FACTOR_INT: int = 704
+.FACTOR_REAL: int = 705
+.FACTOR_CHAR: int = 706
+.FACTOR_STR: int = 707
+.OPERATOR: int = 708
+.OR: int = 709
+.AND: int = 710
+.NOT: int = 711
+.RELATIONAL: int = 712
+.ADDITION: int = 713
+.MULTIPLICATION: int = 714
+.ASSIGNMENT: int = 715
+.BOTTOM: int =  716
+.BOTTOM_D: int = 717
+.GO_TO_TRUE: int = 718
+.GO_TO_FALSE: int = 719
+.GO_TO: int = 720
+.FILL_JUMP: int = 721
+.READ: int = 722
+.WRITE: int = 723
+.ENTER: int =  724
+
 reserved_words: List[str] = [
     'class',
     'begin',
