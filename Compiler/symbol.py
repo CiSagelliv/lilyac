@@ -508,7 +508,7 @@ class Type(Enum):
             return Type.Error
 
     @staticmethod
-    def JF(type):
+    def JF(factor):
         pass
 
     # Add rest of operations, ej JF, JT, J, Write, Read, ...

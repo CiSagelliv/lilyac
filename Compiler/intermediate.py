@@ -39,7 +39,7 @@ class Intermediate:
     def check_quadruple(self, quadruple: Tuple):
         operator, op1, op2, result = quadruple
         if operator in unary_operators:
-            type = symbols_table[op1]
+            type_1 = symbols_table[op1]
             operation = unary_operators[operator]
             type_r = operation(type_1)
         elif operator in binary_operators:
