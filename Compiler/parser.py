@@ -26,7 +26,7 @@ class Parser:
                 row = top.grammeme
                 production = predictions[row][column]
                 if production < 600:
-                    symbols += derivations[production]
+                    symbols += derivations.get(production, [])
                 else:
                     return Error(Compiler.ERRORDERIVE)
 

@@ -55,7 +55,7 @@ class Lexer:
                 or self.state == Compiler.BRACKETSCLOSE
                 or self.state == Compiler.SQUAREBOPEN
                 or self.state == Compiler.SQUAREBCLOSE
-                or self.state == Compiler.ERRORUNKNOWN)
+                or self.state == Compiler.ERRORUNKNOWNL)
 
     def is_valid(self):
         return self.state < 500
