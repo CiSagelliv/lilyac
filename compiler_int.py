@@ -119,7 +119,7 @@ class compiler(QDialog):
                 saving_txt = self.txt_code.toPlainText()
                 data = f.write(saving_txt)
                 f.close()
-
+                
     def go_to_analyze(self):
         pass
 
