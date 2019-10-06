@@ -376,6 +376,7 @@ derivations: Dict = {
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
         SemanticAction(.GO_TO),
+        SemanticAction(.FILL_JUMP),
     ],
     61: [
         Token(RESERVED, 'for'),
@@ -388,6 +389,7 @@ derivations: Dict = {
         Symbol(STATEMENTS),
         Token(RESERVED, 'endfor'),
         SemanticAction(.GO_TO),
+        SemanticAction(.FILL_JUMP),
     ],
     62: [
         Symbol(EXPRESSION_0),

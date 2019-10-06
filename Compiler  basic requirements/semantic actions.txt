@@ -3,90 +3,90 @@
     Process*
 
 Variable Declaration:
-    .ID
+    .ID #701
         Add ID to symbols table
 
         ... fill with process
 
-    .TYPE
+    .TYPE #702
         Fill type of variables in the symbols table
 
         ... fill with process x2
 
 Factors:
-    .FACTOR_ID
+    .FACTOR_ID #703
         Push last token to factor_pile
         ? may need to resolve type
 
-    .FACTOR_INT
+    .FACTOR_INT #704
         Push last token to factor_pile
 
-    .FACTOR_REAL
+    .FACTOR_REAL #705
         Push last token to factor_pile
 
-    .FACTOR_CHAR
+    .FACTOR_CHAR #706
         Push last token to factor_pile
 
-    .FACTOR_STR
+    .FACTOR_STR #707
         Push last token to factor_pile
 
 Operations:
-    .OPERATOR
+    .OPERATOR #708
         Push last token to operator_pile
 
-    .OR
+    .OR #709
         Evaluate disjunction
         Push result to factor_pile
 
-    .AND
+    .AND #710
         Evaluate conjunction
         Push result to factor_pile
 
-    .NOT
+    .NOT #711
         Evaluate negation
         Push result to factor_pile
 
-    .RELATIONAL
+    .RELATIONAL #712
         Evaluate relation
         Push result to factor_pile
 
-    .ADDITION
+    .ADDITION #713
         Evaluate addition or substraction
         Push result to factor_pile
 
-    .MULTIPLICATION
+    .MULTIPLICATION #714
         Evaluate multiplication, division or modulo
         Push result to factor_pile
 
-    .ASSIGNMENT
+    .ASSIGNMENT #715
         Evaluate assignment
 
 Statement:
-    .BOTTOM
+    .BOTTOM #716
         Add false bottom in operator_pile
 
-    .BOTTOM_D
+    .BOTTOM_D #717
         Remove false bottom in operator_pile
 
-    .GO_TO_TRUE
+    .GO_TO_TRUE #718
         Generate jump if top of factor_pile has boolean value TRUE
         Push instruction counter to jump_pile
 
-    .GO_TO_FALSE
+    .GO_TO_FALSE #719
         Generate jump if top of factor_pile has boolean value FALSE
         Push instruction counter to jump_pile
 
-    .GO_TO
+    .GO_TO #720
         Generate inconditional jump
         Push instruction counter to jump_pile
 
-    .FILL_JUMP
+    .FILL_JUMP #721
         Pop jump_pile
         Fill pending jump (go to) wiht following instruction direction
 
 Extra:
-    .READ
+    .READ #722
 
-    .WRITE
+    .WRITE #723
 
-    .ENTER
+    .ENTER #724
