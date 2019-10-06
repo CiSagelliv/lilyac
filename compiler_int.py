@@ -100,6 +100,7 @@ class compiler(QDialog):
     def go_to_open(self):
         self.txt_code.setReadOnly(True)
         filename = QFileDialog.getOpenFileName(self, "Open file", "/Documents")
+        #filename = QFileDialog.getOpenFileName(self, "Open file", "~/Documents")
         if filename[0]:
             f = open(filename[0], "r", encoding="utf8")
             with f:
@@ -110,7 +111,14 @@ class compiler(QDialog):
         self.txt_code.setReadOnly(False)
 
     def go_to_save(self):
-        pass
+        filename = QFileDialog.getSaveFileName(self, "Save file", "/Documents")
+        #filename = QFileDialog.getSaveFileName(self, "Save file", "~/Documents")
+        if filename[0]:
+            f = open(filename[0], "w", encoding="utf8")
+            with f:
+                saving_txt = self.txt_code.toPlainText()
+                data = f.write(saving_txt)
+                f.close()
 
     def go_to_analyze(self):
         pass
