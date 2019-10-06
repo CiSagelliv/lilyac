@@ -32,7 +32,10 @@ class Lexer:
         else:
             index -= 1
         if self.is_valid() and self.state == Compiler.RESERVED:
-            self.state = Compiler.RESERVED if self.lexeme in reserved_words else Compiler.IDENTIFIER
+            if self.lexeme in reserved_words:
+                self.state = Compiler.RESERVED
+            else:
+                self.state = Compiler.IDENTIFIER
         token = Token(self.state, self.lexeme)
         return token, index
 

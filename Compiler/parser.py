@@ -19,9 +19,8 @@ class Parser:
             if top == token:
                 return top
             elif top.terminal:
-                # Add number code for syntax errors
-                # Expected a token
-                return Error(0)
+                return Error(Compiler.ERROREXPECT,
+                             expected=str(top), found=str(token))
             else:
                 column = Parser.hash_token(top)
                 row = top.grammeme
@@ -29,9 +28,7 @@ class Parser:
                 if production < 600:
                     symbols += derivations[production]
                 else:
-                    # Add number code for syntax error
-                    # Invalid derivation
-                    return Error(1)
+                    return Error(Compiler.ERRORDERIVE)
 
     @staticmethod
     def hash_token(token):
