@@ -1,49 +1,6 @@
-# Terminal Symbols
-from typing import List, Any, Union
-
-RESERVED = 101
-IDENTIFIER = 102
-LIBRARY = 103
-COMMENTARY = 104
-INTEGER = 105
-FLOAT = 106
-FLOATSCI = 107
-CHARACTER = 108
-STRING = 109
-TIMES_SIGN = 110
-OVER_SIGN = 111
-PLUS_SIGN = 112
-MINUS_SIGN = 113
-MODULO = 114
-OR = 115
-AND = 116
-NOT = 117
-LESSTHAN = 118
-LESSEQUALS = 119
-GREATERTHAN = 120
-GREATEREQUALS = 121
-EQUALS = 122
-NEQUALS = 123
-ASSIGNMENT = 124
-POINT = 125
-COMMA = 126
-COLON = 127
-SEMICOLON = 128
-PARENTHESISOPEN = 129
-PARENTHESISCLOSE = 130
-BRACKETSOPEN = 131
-BRACKETSCLOSE = 132
-SQUAREBOPEN = 133
-SQUAREBCLOSE = 134
-# Error States
-ERRORIDENTIFIER = 501
-ERRORLIBRARY = 502
-ERRORFLOAT = 503
-ERRORFLOATSCI = 504
-ERRORCHAR = 505
-ERROROR = 506
-ERRORAND = 507
-ERRORUNKNOWN = 599
+from typing import List
+import Compiler
+from Compiler import reserved_words
 
 transition: List[List[int]] = [
     [2,   1,   1,   1,   1,   2,   10,  599, 19,  7,   20,  21,  22,  35,  16,  18,  0,   23,  25,  27,  28,  30,  34,  36,  126, 128, 129, 130, 131, 132, 133, 134, 599],
@@ -86,37 +43,6 @@ transition: List[List[int]] = [
 ]
 
 
-reserved_words: List[str] = [
-    "class",
-    "begin",
-    "end",
-    "def",
-    "as",
-    "integer",
-    "float",
-    "char",
-    "string",
-    "boolean",
-    "if",
-    "else",
-    "elseif",
-    "endif",
-    "for",
-    "do",
-    "endfor",
-    "while",
-    "endwhile",
-    "function",
-    "endfunction",
-    "import",
-    "null",
-    "read",
-    "write",
-    "enter",
-    "principal",
-]
-
-
 class Lexer:
     state: int = ...
     lexeme: str = ...
@@ -144,27 +70,27 @@ class Lexer:
             self.lexeme += text[index]
         else:
             index -= 1
-        if self.is_valid() and self.state == RESERVED:
-            self.state = RESERVED if self.lexeme in reserved_words else IDENTIFIER
+        if self.is_valid() and self.state == Compiler.RESERVED:
+            self.state = Compiler.RESERVED if self.lexeme in reserved_words else Compiler.IDENTIFIER
         return ..., index  # Return a token and the index
 
     def is_delimiter(self):
         return self.state >= 100
 
     def is_final(self):
-        return (self.state == LIBRARY
-                or self.state == COMMENTARY
-                or self.state == CHARACTER
-                or self.state == STRING
-                or self.state == COMMA
-                or self.state == SEMICOLON
-                or self.state == PARENTHESISOPEN
-                or self.state == PARENTHESISCLOSE
-                or self.state == BRACKETSOPEN
-                or self.state == BRACKETSCLOSE
-                or self.state == SQUAREBOPEN
-                or self.state == SQUAREBCLOSE
-                or self.state == ERRORUNKNOWN)
+        return (self.state == Compiler.LIBRARY
+                or self.state == Compiler.COMMENTARY
+                or self.state == Compiler.CHARACTER
+                or self.state == Compiler.STRING
+                or self.state == Compiler.COMMA
+                or self.state == Compiler.SEMICOLON
+                or self.state == Compiler.PARENTHESISOPEN
+                or self.state == Compiler.PARENTHESISCLOSE
+                or self.state == Compiler.BRACKETSOPEN
+                or self.state == Compiler.BRACKETSCLOSE
+                or self.state == Compiler.SQUAREBOPEN
+                or self.state == Compiler.SQUAREBCLOSE
+                or self.state == Compiler.ERRORUNKNOWN)
 
     def is_valid(self):
         return self.state < 500
