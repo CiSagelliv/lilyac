@@ -1,4 +1,5 @@
 import Compiler
+from enum import Enum, auto
 
 
 class Symbol:
@@ -408,3 +409,98 @@ class SemanticAction(Symbol):
             pass
         elif self.grammeme == Compiler._ENTER:
             pass
+
+
+class Type(Enum):
+    ''' Data types
+    '''
+    Boolean = auto()
+    Integer = auto()
+    Real = auto()
+    Character = auto()
+    String = auto()
+    Error = auto()
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __add__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __sub__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __mul__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __truediv__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __mod__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __and__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __or__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __lt__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __le__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __eq__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __ne__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __gt__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error
+
+    def __ge__(self, other):
+        if ...:
+            pass
+        else:
+            return Type.Error

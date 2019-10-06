@@ -1,8 +1,9 @@
 from typing import List, Dict
 
-from .symbol import Symbol, Token, Error, SemanticAction
+from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
+from .intermediate import Intermediate
 
 # Lexicon
 # Terminals
