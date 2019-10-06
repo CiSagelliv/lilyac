@@ -11,5 +11,5 @@ setup(
         'no me sé el correo de Quiroga',
     ],
     packages=['lilyac'],
-    install_requires=[],
+    install_requires=['PyQt5==5.9.2'],
 )
