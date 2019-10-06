@@ -1,9 +1,9 @@
-from typing import List, Dict
-
 from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
+
+from typing import List, Dict
 
 # Lexicon
 # Terminals
@@ -42,7 +42,7 @@ BRACKETSCLOSE: int = 132
 SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
-# Error States
+# Lexical Errors
 ERRORIDENTIFIER: int = 501
 ERRORLIBRARY: int = 502
 ERRORFLOAT: int = 503
@@ -50,7 +50,9 @@ ERRORFLOATSCI: int = 504
 ERRORCHAR: int = 505
 ERROROR: int = 506
 ERRORAND: int = 507
-ERRORUNKNOWN: int = 599
+ERRORUNKNOWNL: int = 599
+
+# Syntax Errors
 ERRORPH_0: int = 601
 ERRORPH_1: int = 602
 ERROREVD: int = 603
@@ -85,6 +87,11 @@ ERRORWRITE: int = 631
 ERRORENTER: int = 632
 ERROREXPECT: int = 633
 ERRORDERIVE: int = 634
+ERRORUNKNOWNP: int = 699
+
+# Semantic Errors
+ERRORTYPEOP: int = 701
+ERRORUNKNOWNS: int = 799
 
 # Syntax
 END_OF_FILE: int = -1

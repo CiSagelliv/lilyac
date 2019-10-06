@@ -348,6 +348,8 @@ class Error(Symbol):
             + f'Expected a {self.expected}, but found: {self.found}'
         elif self.grammeme == Compiler.ERRORDERIVE:
             return 'Syntax Error: Invalid derivation'
+        elif ...:
+            ...
         else:
             return 'Unknown error'
 
@@ -504,3 +506,9 @@ class Type(Enum):
             pass
         else:
             return Type.Error
+
+    @staticmethod
+    def JF(type):
+        pass
+
+    # Add rest of operations, ej JF, JT, J, Write, Read, ...
