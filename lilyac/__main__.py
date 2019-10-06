@@ -1,4 +1,4 @@
-from lilyac import Lexer, Parser, Intermediate, compiler
+from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error
 from PyQt5.QtWidgets import QApplication
 import sys
 
@@ -8,11 +8,34 @@ def main():
         file = sys.argv[1]
         code: str = ''
         with open(file) as f:
-            code = f.read()
-
+            code = f.read() + ' '
         lexer = Lexer()
         parser = Parser()
         intermediate = Intermediate()
+        i = 0
+        error = False
+        while i < len(code) and len(parser.symbols) > 0:
+            if parser.is_semantic_action():
+                action = parser.symbols.pop()
+                intermediate.step(action)
+            else:
+                token, i = lexer.generate_token(i, code)
+                if isinstance(token, Error):
+                    error = True
+                    print(token)
+                    break
+                while True:
+                    new_token = parser.step(token)
+                    if isinstance(new_token, Error):
+                        error = True
+                        print(new_token)
+                        break
+                    elif isinstance(new_token, Token):
+                        break
+                    intermediate.step(new_token)
+                intermediate.step(token)
+        if not error:
+            print('Succesfully compiled')
     else:
         app = QApplication(sys.argv)
         ex = compiler()
