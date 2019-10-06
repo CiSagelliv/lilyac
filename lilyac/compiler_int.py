@@ -17,7 +17,7 @@ class compiler(QDialog):
         self.layout().addLayout(self.factor_pile())
         self.layout().addLayout(self.production_pile())
 
-        self.setGeometry(0,30,1500,700)
+        self.setGeometry(0, 30, 1500, 700)
         self.setWindowTitle('lilyac')
         self.show()
 
@@ -100,7 +100,7 @@ class compiler(QDialog):
     def go_to_open(self):
         self.txt_code.setReadOnly(True)
         filename = QFileDialog.getOpenFileName(self, "Open file", "/Documents")
-        #filename = QFileDialog.getOpenFileName(self, "Open file", "~/Documents")
+        # filename = QFileDialog.getOpenFileName(self, "Open file", "~/Documents")
         if filename[0]:
             f = open(filename[0], "r", encoding="utf8")
             with f:
@@ -112,16 +112,17 @@ class compiler(QDialog):
 
     def go_to_save(self):
         filename = QFileDialog.getSaveFileName(self, "Save file", "/Documents")
-        #filename = QFileDialog.getSaveFileName(self, "Save file", "~/Documents")
+        # filename = QFileDialog.getSaveFileName(self, "Save file", "~/Documents")
         if filename[0]:
             f = open(filename[0], "w", encoding="utf8")
             with f:
                 saving_txt = self.txt_code.toPlainText()
                 data = f.write(saving_txt)
                 f.close()
-                
+
     def go_to_analyze(self):
         pass
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

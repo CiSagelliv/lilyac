@@ -12,4 +12,9 @@ setup(
     ],
     packages=['lilyac'],
     install_requires=['PyQt5==5.9.2'],
+    entry_points={
+        'console_scripts': [
+            'lilyac = lilyac.__main__:main'
+        ]
+    },
 )
