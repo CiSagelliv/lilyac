@@ -154,6 +154,8 @@ _FILL_JUMP: int = 721
 _READ: int = 722
 _WRITE: int = 723
 _ENTER: int = 724
+_BOTTOM_F: int = 725
+_BOTTOM_F_D: int = 726
 
 reserved_words: List[str] = [
     'class',
@@ -280,10 +282,12 @@ derivations: Dict = {
     ],
     3: [
         Token(RESERVED, 'def'),
+        SemanticAction(_BOTTOM_F),
         Symbol(VARIABLES),
         Token(RESERVED, 'as'),
         Symbol(TYPE),
         SemanticAction(_TYPE),
+        SemanticAction(_BOTTOM_F_D),
         Token(SEMICOLON, ';'),
         Symbol(DECL_VARIABLES),
     ],

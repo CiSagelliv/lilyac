@@ -1,0 +1,6 @@
+#	OPERATOR	OP1	OP2	RESULT
+0	WRITE			"Hola Mundo!!"
+1	ENTER			
+2	READ			B
+3	+	A	B	R1
+4	WRITE			res

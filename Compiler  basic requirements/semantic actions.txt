@@ -31,26 +31,32 @@ Operations:
         Push last token to operator_pile
 
     .OR #709
-        Evaluate disjunction
-        Push result to factor_pile
+        If top of operator_pile is OR
+            Evaluate disjunction
+            Push result to factor_pile
 
     .AND #710
-        Evaluate conjunction
-        Push result to factor_pile
+        if top of operator_pile is AND
+            Evaluate conjunction
+            Push result to factor_pile
 
     .NOT #711
-        Evaluate negation
-        Push result to factor_pile
+        if top of operator_pile is NOT
+          Evaluate negation
+          Push result to factor_pile
 
     .RELATIONAL #712
-        Evaluate relation
-        Push result to factor_pile
+        if top of operator_pile is RELATIONAL
+          Evaluate relation
+          Push result to factor_pile
 
     .ADDITION #713
-        Evaluate addition or substraction
-        Push result to factor_pile
+        if top of operator_pile is + or -
+          Evaluate addition or substraction
+          Push result to factor_pile
 
     .MULTIPLICATION #714
+        if top of operator_pile is * or / or
         Evaluate multiplication, division or modulo
         Push result to factor_pile
 
@@ -59,10 +65,10 @@ Operations:
 
 Statement:
     .BOTTOM #716
-        Add false bottom in operator_pile
+        Add false bottom to operator_pile
 
     .BOTTOM_D #717
-        Remove false bottom in operator_pile
+        Remove false bottom from operator_pile
 
     .GO_TO_TRUE #718
         Generate jump if top of factor_pile has boolean value TRUE
@@ -79,6 +85,12 @@ Statement:
     .FILL_JUMP #721
         Pop jump_pile
         Fill pending jump (go to) wiht following instruction direction
+
+    .BOTTOM_F #725
+        Add false bottom to factor_pile
+
+    .BOTTOM_F_D #725
+        Remove false bottom from factor_pile
 
 Extra:
     .READ #722

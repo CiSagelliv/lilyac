@@ -349,64 +349,189 @@ class SemanticAction(Symbol):
 
     def __call__(self, im):
         if self.grammeme == lilyac._ID:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._TYPE:
-            pass
+            type_v = Type[im.last_token.lexeme]
+            factor = im.factor_pile[-1]
+            while factor:
+                im.factor_pile.pop()
+                im.symbols_table[factor.lexeme] = type_v
+                factor = im.factor_pile[-1]
         elif self.grammeme == lilyac._FACTOR_ID:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._FACTOR_INT:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._FACTOR_REAL:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._FACTOR_CHAR:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._FACTOR_STR:
-            pass
+            im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._OPERATOR:
-            pass
+            im.operator_pile.append(im.last_token)
         elif self.grammeme == lilyac._OR:
-            pass
+            operator = im.operator_pile[-1]
+            if operator.grammeme == lilyac.OR:
+                op2 = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                result = im.new_temporal()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    op2=op2.lexeme,
+                    result=result,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._AND:
-            pass
+            operator = im.operator_pile[-1]
+            if operator.grammeme == lilyac.AND:
+                op2 = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                result = im.new_temporal()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    op2=op2.lexeme,
+                    result=result,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._NOT:
-            pass
+            try:
+                operator = im.operator_pile[-1]
+                if operator.grammeme == lilyac.NOT:
+                    op1 = im.factor_pile.pop()
+                    result = im.new_temporal()
+                    im.generate_quadruple(
+                        operator=operator.lexeme,
+                        op1=op1.lexeme,
+                        result=result,
+                        )
+                    im.factor_pile.append(result)
+            except Exception:
+                pass
         elif self.grammeme == lilyac._RELATIONAL:
-            pass
+            operator = im.operator_pile[-1]
+            if (operator.grammeme == lilyac.LESSTHAN
+               or operator.grammeme == lilyac.LESSEQUALS
+               or operator.grammeme == lilyac.GREATERTHAN
+               or operator.grammeme == lilyac.GREATEREQUALS
+               or operator.grammeme == lilyac.EQUALS
+               or operator.grammeme == lilyac.NEQUALS):
+                op2 = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                result = im.new_temporal()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    op2=op2.lexeme,
+                    result=result,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._ADDITION:
-            pass
+            operator = im.operator_pile[-1]
+            if (operator.grammeme == lilyac.PLUS_SIGN
+               or operator.grammeme == lilyac.MINUS_SIGN):
+                op2 = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                result = im.new_temporal()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    op2=op2.lexeme,
+                    result=result,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._MULTIPLICATION:
-            pass
+            operator = im.operator_pile[-1]
+            if operator.grammeme == lilyac.OR:
+                op2 = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                result = im.new_temporal()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    op2=op2.lexeme,
+                    result=result,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._ASSIGNMENT:
-            pass
+            operator = im.operator_pile[-1]
+            if operator.grammeme == lilyac.EQUAL_SIGN:
+                result = im.factor_pile.pop()
+                op1 = im.factor_pile.pop()
+                im.generate_quadruple(
+                    operator=operator.lexeme,
+                    op1=op1.lexeme,
+                    result=result.lexeme,
+                )
+                im.factor_pile.append(result)
         elif self.grammeme == lilyac._BOTTOM:
-            pass
+            im.operator_pile.append(False)
         elif self.grammeme == lilyac._BOTTOM_D:
-            pass
+            im.operator_pile.pop()
         elif self.grammeme == lilyac._GO_TO_TRUE:
-            pass
+            operator = 'JT'
+            op1 = im.factor_pile.pop()
+            im.jump_pile.append(im.counter)
+            im.generate_quadruple(
+                operator=operator,
+                op1=op1.lexeme,
+            )
+            im.factor_pile.append(result)
         elif self.grammeme == lilyac._GO_TO_FALSE:
-            pass
+            operator = 'JF'
+            op1 = im.factor_pile.pop()
+            im.jump_pile.append(im.counter)
+            im.generate_quadruple(
+                operator=operator,
+                op1=op1.lexeme,
+            )
+            im.factor_pile.append(result)
         elif self.grammeme == lilyac._GO_TO:
-            pass
+            operator = 'JI'
+            result = im.jump_pile[-1] + 1
+            im.generate_quadruple(
+                operator=operator,
+                result=result,
+            )
         elif self.grammeme == lilyac._FILL_JUMP:
-            pass
+            instruction = im.jump_pile.pop()
+            im.quadruples[instruction][3] = im.counter + 1
         elif self.grammeme == lilyac._READ:
-            pass
+            operator = 'READ'
+            result = im.factor_pile.pop()
+            im.generate_quadruple(
+                operator=operator,
+                result=result.lexeme,
+            )
         elif self.grammeme == lilyac._WRITE:
-            pass
+            operator = 'WRITE'
+            result = im.factor_pile.pop()
+            im.generate_quadruple(
+                operator=operator,
+                result=result.lexeme,
+            )
         elif self.grammeme == lilyac._ENTER:
-            pass
+            operator = 'ENTER'
+            im.generate_quadruple(
+                operator=operator,
+            )
+        elif self.grammeme == lilyac._BOTTOM_F:
+            im.factor_pile.append(False)
+        elif self.grammeme == lilyac._BOTTOM_F:
+            im.factor_pile.pop()
 
 
 class Type(Enum):
     ''' Data types
     '''
-    Boolean = auto()
-    Integer = auto()
-    Real = auto()
-    Character = auto()
-    String = auto()
+    integer = auto()
+    float = auto()
+    char = auto()
+    string = auto()
+    boolean = auto()
     Error = auto()
+    Jump = auto()
 
     def __repr__(self):
         return self.name
@@ -417,6 +542,8 @@ class Type(Enum):
     def __add__(self, other):
         if ...:
             pass
+        elif self.value == Type.integer and other.value == Type.integer:
+            return Type.integer
         else:
             return Type.Error
 
@@ -491,9 +618,25 @@ class Type(Enum):
             pass
         else:
             return Type.Error
+    #
+    # def ... (self):  # NOT
+    #     pass
 
     @staticmethod
     def JF(factor):
-        pass
+        if factor.value == Type.boolean:
+            return Type.Jump
+        else:
+            return Type.Error
 
+    @staticmethod
+    def JT(factor):
+        if factor.value == Type.boolean:
+            return Type.Jump
+        else:
+            return Type.Error
+
+    @staticmethod
+    def JI():
+        return Type.Jump
     # Add rest of operations, ej JF, JT, J, Write, Read, ...

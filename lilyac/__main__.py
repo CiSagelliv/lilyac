@@ -36,6 +36,13 @@ def main():
                 intermediate.step(token)
         if not error:
             print('Succesfully compiled')
+            with open('out.o', 'w') as f:
+                f.write('#\tOPERATOR\tOP1\tOP2\tRESULT\n')
+                for i, quadruple in enumerate(intermediate.quadruples):
+                    operator, op1, op2, result = quadruple
+                    line = f'{i}\t{operator}\t{op1}\t{op2}\t{result}\n'
+                    print(line)
+                    f.write(line)
     else:
         app = QApplication(sys.argv)
         ex = compiler()
