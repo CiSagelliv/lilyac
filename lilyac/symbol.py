@@ -379,8 +379,8 @@ class SemanticAction(Symbol):
                 im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
-                    op2=op2.lexeme,
+                    op1=op1,
+                    op2=op2,
                     result=result,
                 )
         elif self.grammeme == lilyac._AND:
@@ -393,8 +393,8 @@ class SemanticAction(Symbol):
                 im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
-                    op2=op2.lexeme,
+                    op1=op1,
+                    op2=op2,
                     result=result,
                 )
         elif self.grammeme == lilyac._NOT:
@@ -407,7 +407,7 @@ class SemanticAction(Symbol):
                     im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                     return im.generate_quadruple(
                         operator=operator.lexeme,
-                        op1=op1.lexeme,
+                        op1=op1,
                         result=result,
                     )
             except Exception:
@@ -427,8 +427,8 @@ class SemanticAction(Symbol):
                 im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
-                    op2=op2.lexeme,
+                    op1=op1,
+                    op2=op2,
                     result=result,
                 )
         elif self.grammeme == lilyac._ADDITION:
@@ -442,8 +442,8 @@ class SemanticAction(Symbol):
                 im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
-                    op2=op2.lexeme,
+                    op1=op1,
+                    op2=op2,
                     result=result,
                 )
         elif self.grammeme == lilyac._MULTIPLICATION:
@@ -456,8 +456,8 @@ class SemanticAction(Symbol):
                 im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
-                    op2=op2.lexeme,
+                    op1=op1,
+                    op2=op2,
                     result=result,
                 )
         elif self.grammeme == lilyac._ASSIGNMENT:
@@ -468,7 +468,7 @@ class SemanticAction(Symbol):
                 op1 = im.factor_pile.pop()
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    op1=op1.lexeme,
+                    op1=op1,
                     result=result.lexeme,
                 )
         elif self.grammeme == lilyac._BOTTOM:
@@ -481,7 +481,7 @@ class SemanticAction(Symbol):
             im.jump_pile.append(im.counter)
             return im.generate_quadruple(
                 operator=operator,
-                op1=op1.lexeme,
+                op1=op1,
             )
         elif self.grammeme == lilyac._GO_TO_FALSE:
             operator = 'JF'
@@ -489,7 +489,7 @@ class SemanticAction(Symbol):
             im.jump_pile.append(im.counter)
             return im.generate_quadruple(
                 operator=operator,
-                op1=op1.lexeme,
+                op1=op1,
             )
         elif self.grammeme == lilyac._GO_TO:
             operator = 'JI'
@@ -519,9 +519,8 @@ class SemanticAction(Symbol):
                 im.operator_pile.pop()
         elif self.grammeme == lilyac._FOR_COMPARISON:
             op1 = im.quadruples[-1][1]
-            op1_token = Token(lilyac.IDENTIFIER, op1)
-            im.factor_pile.append(op1_token)
-            im.factor_pile.append(op1_token)
+            im.factor_pile.append(op1)
+            im.factor_pile.append(op1)
             operator_token = Token(lilyac.GREATERTHAN, '>')
             im.operator_pile.append(operator_token)
         elif self.grammeme == lilyac._INCREMENT:
@@ -529,13 +528,13 @@ class SemanticAction(Symbol):
             result = im.new_temporal()
             im.generate_quadruple(
                 operator='+',
-                op1=op1.lexeme,
-                op2=1,
+                op1=op1,
+                op2=Token(lilyac.INTEGER, '1'),
                 result=result,
             )
             im.generate_quadruple(
                 operator='=',
-                op1=op1.lexeme,
+                op1=op1,
                 result=result,
             )
         elif self.grammeme == lilyac._ENTER:

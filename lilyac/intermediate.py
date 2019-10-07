@@ -31,8 +31,8 @@ class Intermediate:
             self.last_token = symbol
 
     def generate_quadruple(self,
-                           operator: str = '', op1: str = '',
-                           op2: str = '', result: str = ''):
+                           operator: str = '', op1: Token = None,
+                           op2: Token = None, result: str = ''):
         quadruple = [operator, op1, op2, result]
         result = self.check_quadruple(quadruple)
         self.counter += 1
@@ -47,24 +47,12 @@ class Intermediate:
             operation = nonary_operators[operator]
             type_r = operation()
         elif operator in unary_operators:
-            type_1 = Type.Error
-            if op1 in self.symbols_table:
-                type_1 = self.symbols_table[op1]
-            else:
-                return Error(lilyac.ERRORUNDECL, expected=op1)
+            type_1 = self.get_type(op1)
             operation = unary_operators[operator]
             type_r = operation(type_1)
         elif operator in binary_operators:
-            type_1 = Type.Error
-            type_2 = Type.Error
-            if op1 in self.symbols_table:
-                type_1 = self.symbols_table[op1]
-            else:
-                return Error(lilyac.ERRORUNDECL, expected=op1)
-            if op2 in self.symbols_table:
-                type_2 = self.symbols_table[op2]
-            else:
-                return Error(lilyac.ERRORUNDECL, expected=op2)
+            type_1 = self.get_type(op1)
+            type_2 = self.get_type(op2)
             operation = binary_operators[operator]
             type_r = operation(type_1, type_2)
         if type_r != Type.Error:
@@ -72,6 +60,25 @@ class Intermediate:
             return
         else:
             return Error(lilyac.ERRORTYPEOP)
+
+    def get_type(self, op: Token):
+        if op.grammeme == lilyac.IDENTIFIER:
+            if op.lexeme in self.symbols_table:
+                return self.symbols_table[op.lexeme]
+            else:
+                return Error(lilyac.ERRORUNDECL, expected=op)
+        elif op.grammeme == lilyac.INTEGER:
+            return Type.integer
+        elif op.grammeme == lilyac.FLOAT:
+            return Type.float
+        elif op.grammeme == lilyac.FLOATSCI:
+            return Type.float
+        elif op.grammeme == lilyac.CHARACTER:
+            return Type.character
+        elif op.grammeme == lilyac.STRING:
+            return Type.string
+        else:
+            return Type.Error
 
     def new_temporal(self):
         self.temporal_counter += 1
