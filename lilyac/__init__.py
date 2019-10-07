@@ -92,6 +92,7 @@ ERRORUNKNOWNP: int = 699
 
 # Semantic Errors
 ERRORTYPEOP: int = 701
+ERRORUNDECL: int = 702
 ERRORUNKNOWNS: int = 799
 
 # Syntax
@@ -130,32 +131,33 @@ WRITE: int = 30
 ENTER: int = 31
 
 # Semantic actions
-_ID: int = 701
-_TYPE: int = 702
-_FACTOR_ID: int = 703
-_FACTOR_INT: int = 704
-_FACTOR_REAL: int = 705
-_FACTOR_CHAR: int = 706
-_FACTOR_STR: int = 707
-_OPERATOR: int = 708
-_OR: int = 709
-_AND: int = 710
-_NOT: int = 711
-_RELATIONAL: int = 712
-_ADDITION: int = 713
-_MULTIPLICATION: int = 714
-_ASSIGNMENT: int = 715
-_BOTTOM: int = 716
-_BOTTOM_D: int = 717
-_GO_TO_TRUE: int = 718
-_GO_TO_FALSE: int = 719
-_GO_TO: int = 720
-_FILL_JUMP: int = 721
-_READ: int = 722
-_WRITE: int = 723
-_ENTER: int = 724
-_BOTTOM_F: int = 725
-_BOTTOM_F_D: int = 726
+_ID: int = 1001
+_TYPE: int = 1002
+_FACTOR_ID: int = 1003
+_FACTOR_INT: int = 1004
+_FACTOR_REAL: int = 1005
+_FACTOR_CHAR: int = 1006
+_FACTOR_STR: int = 1007
+_OPERATOR: int = 1008
+_OR: int = 1009
+_AND: int = 1010
+_NOT: int = 1011
+_RELATIONAL: int = 1012
+_ADDITION: int = 1013
+_MULTIPLICATION: int = 1014
+_ASSIGNMENT: int = 1015
+_BOTTOM: int = 1016
+_BOTTOM_D: int = 1017
+_GO_TO_TRUE: int = 1018
+_GO_TO_FALSE: int = 1019
+_GO_TO: int = 1020
+_FILL_JUMP: int = 1021
+_FILL_JUMP_1: int = 1022
+_READWRITE: int = 1023
+_READWRITE_O: int = 1024
+_ENTER: int = 1025
+_BOTTOM_F: int = 1026
+_BOTTOM_F_D: int = 1027
 
 reserved_words: List[str] = [
     'class',
@@ -343,6 +345,7 @@ derivations: Dict = {
     ],
     22: [
         Token(IDENTIFIER),
+        SemanticAction(_FACTOR_ID),
         Token(EQUAL_SIGN, '='),
         SemanticAction(_OPERATOR),
         Symbol(EXPRESSION_0),
@@ -487,6 +490,7 @@ derivations: Dict = {
         SemanticAction(_FILL_JUMP),
     ],
     58: [
+        SemanticAction(_FILL_JUMP_1),
         Token(RESERVED, 'else'),
         SemanticAction(_GO_TO),
         Symbol(STATEMENTS),
@@ -517,6 +521,7 @@ derivations: Dict = {
     ],
     62: [
         Symbol(EXPRESSION_0),
+        SemanticAction(_READWRITE),
         Symbol(MORE_EXPRESSIONS),
     ],
     63: [
@@ -525,17 +530,19 @@ derivations: Dict = {
     ],
     65: [
         Token(RESERVED, 'read'),
+        SemanticAction(_OPERATOR),
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSIONS),
         Token(PARENTHESISCLOSE, ')'),
-        SemanticAction(_READ),
+        SemanticAction(_READWRITE_O),
     ],
     66: [
         Token(RESERVED, 'write'),
+        SemanticAction(_OPERATOR),
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSIONS),
         Token(PARENTHESISCLOSE, ')'),
-        SemanticAction(_WRITE),
+        SemanticAction(_READWRITE_O),
     ],
     67: [
         Token(RESERVED, 'enter'),

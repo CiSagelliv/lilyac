@@ -326,9 +326,11 @@ class Error(Symbol):
         elif self.grammeme == lilyac.ERROREXPECT:
             return f'Syntax Error: Expected a {self.expected}, but found: {self.found}'
         elif self.grammeme == lilyac.ERRORDERIVE:
-            return f'Syntax Error: Invalid derivation: : Expected a {self.expected}, but found: {self.found}'
-        elif ...:
-            ...
+            return f'Syntax Error: Invalid derivation: Expected a {self.expected}, but found: {self.found}'
+        elif self.grammeme == lilyac.ERRORTYPEOP:
+            return f'Semantic Error: Invalid operation'
+        elif self.grammeme == lilyac.ERRORUNDECL:
+            return f'Semantic Error: Undeclared variable: {self.expected}'
         else:
             return 'Unknown error'
 
@@ -375,38 +377,40 @@ class SemanticAction(Symbol):
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.generate_quadruple(
+                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     op2=op2.lexeme,
                     result=result,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._AND:
             operator = im.operator_pile[-1]
             if operator.grammeme == lilyac.AND:
+                im.operator_pile.pop()
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.generate_quadruple(
+                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     op2=op2.lexeme,
                     result=result,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._NOT:
             try:
                 operator = im.operator_pile[-1]
                 if operator.grammeme == lilyac.NOT:
+                    im.operator_pile.pop()
                     op1 = im.factor_pile.pop()
                     result = im.new_temporal()
-                    im.generate_quadruple(
+                    im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                    return im.generate_quadruple(
                         operator=operator.lexeme,
                         op1=op1.lexeme,
                         result=result,
-                        )
-                    im.factor_pile.append(result)
+                    )
             except Exception:
                 pass
         elif self.grammeme == lilyac._RELATIONAL:
@@ -417,54 +421,57 @@ class SemanticAction(Symbol):
                or operator.grammeme == lilyac.GREATEREQUALS
                or operator.grammeme == lilyac.EQUALS
                or operator.grammeme == lilyac.NEQUALS):
+                im.operator_pile.pop()
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.generate_quadruple(
+                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     op2=op2.lexeme,
                     result=result,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._ADDITION:
             operator = im.operator_pile[-1]
             if (operator.grammeme == lilyac.PLUS_SIGN
                or operator.grammeme == lilyac.MINUS_SIGN):
+                im.operator_pile.pop()
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.generate_quadruple(
+                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     op2=op2.lexeme,
                     result=result,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._MULTIPLICATION:
             operator = im.operator_pile[-1]
             if operator.grammeme == lilyac.OR:
+                im.operator_pile.pop()
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.generate_quadruple(
+                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     op2=op2.lexeme,
                     result=result,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._ASSIGNMENT:
             operator = im.operator_pile[-1]
             if operator.grammeme == lilyac.EQUAL_SIGN:
+                im.operator_pile.pop()
                 result = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
-                im.generate_quadruple(
+                return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1.lexeme,
                     result=result.lexeme,
                 )
-                im.factor_pile.append(result)
         elif self.grammeme == lilyac._BOTTOM:
             im.operator_pile.append(False)
         elif self.grammeme == lilyac._BOTTOM_D:
@@ -473,47 +480,47 @@ class SemanticAction(Symbol):
             operator = 'JT'
             op1 = im.factor_pile.pop()
             im.jump_pile.append(im.counter)
-            im.generate_quadruple(
+            return im.generate_quadruple(
                 operator=operator,
                 op1=op1.lexeme,
             )
-            im.factor_pile.append(result)
         elif self.grammeme == lilyac._GO_TO_FALSE:
             operator = 'JF'
             op1 = im.factor_pile.pop()
             im.jump_pile.append(im.counter)
-            im.generate_quadruple(
+            return im.generate_quadruple(
                 operator=operator,
                 op1=op1.lexeme,
             )
-            im.factor_pile.append(result)
         elif self.grammeme == lilyac._GO_TO:
             operator = 'JI'
-            result = im.jump_pile[-1] + 1
-            im.generate_quadruple(
+            im.jump_pile.append(im.counter)
+            return im.generate_quadruple(
                 operator=operator,
-                result=result,
             )
         elif self.grammeme == lilyac._FILL_JUMP:
             instruction = im.jump_pile.pop()
+            im.quadruples[instruction][3] = im.counter
+        elif self.grammeme == lilyac._FILL_JUMP_1:
+            instruction = im.jump_pile.pop()
             im.quadruples[instruction][3] = im.counter + 1
-        elif self.grammeme == lilyac._READ:
-            operator = 'READ'
-            result = im.factor_pile.pop()
-            im.generate_quadruple(
-                operator=operator,
-                result=result.lexeme,
-            )
-        elif self.grammeme == lilyac._WRITE:
-            operator = 'WRITE'
-            result = im.factor_pile.pop()
-            im.generate_quadruple(
-                operator=operator,
-                result=result.lexeme,
-            )
+        elif self.grammeme == lilyac._READWRITE:
+            operator = im.operator_pile[-1]
+            if (operator.grammeme == lilyac.RESERVED
+               and (operator.lexeme == 'read' or operator.lexeme == 'write')):
+                result = im.factor_pile.pop()
+                return im.generate_quadruple(
+                    operator=operator.lexeme,
+                    result=result.lexeme,
+                )
+        elif self.grammeme == lilyac._READWRITE_O:
+            operator = im.operator_pile[-1]
+            if (operator.grammeme == lilyac.RESERVED
+               and (operator.lexeme == 'read' or operator.lexeme == 'write')):
+                im.operator_pile.pop()
         elif self.grammeme == lilyac._ENTER:
-            operator = 'ENTER'
-            im.generate_quadruple(
+            operator = 'enter'
+            return im.generate_quadruple(
                 operator=operator,
             )
         elif self.grammeme == lilyac._BOTTOM_F:

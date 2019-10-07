@@ -17,7 +17,10 @@ def main():
         while i < len(code) and len(parser.symbols) > 0:
             if parser.is_semantic_action():
                 action = parser.symbols.pop()
-                intermediate.step(action)
+                result = intermediate.step(action)
+                if isinstance(result, Error):
+                    error = True
+                    print(result)
             else:
                 token, i = lexer.generate_token(i, code)
                 if isinstance(token, Error):
@@ -32,8 +35,14 @@ def main():
                         break
                     elif isinstance(new_token, Token):
                         break
-                    intermediate.step(new_token)
-                intermediate.step(token)
+                    result = intermediate.step(new_token)
+                    if isinstance(result, Error):
+                        error = True
+                        print(result)
+                result = intermediate.step(token)
+                if isinstance(result, Error):
+                    error = True
+                    print(result)
         if not error:
             print('Succesfully compiled')
             with open('out.o', 'w') as f:
@@ -41,7 +50,6 @@ def main():
                 for i, quadruple in enumerate(intermediate.quadruples):
                     operator, op1, op2, result = quadruple
                     line = f'{i}\t{operator}\t{op1}\t{op2}\t{result}\n'
-                    print(line)
                     f.write(line)
     else:
         app = QApplication(sys.argv)
