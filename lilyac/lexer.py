@@ -18,7 +18,7 @@ class Lexer:
 
     def generate_token(self, index: int, text: str):
         self.restart()
-        while True:
+        while index < len(text):
             self.step(text[index])
             if self.is_delimiter():
                 break
@@ -26,7 +26,7 @@ class Lexer:
                 self.lexeme += text[index]
             index += 1
         if index == len(text):
-            return Token(lilyac.END_OF_FILE)
+            return Token(lilyac.END_OF_FILE), index
         if self.is_final():
             self.lexeme += text[index]
         else:
@@ -37,7 +37,7 @@ class Lexer:
             else:
                 self.state = lilyac.IDENTIFIER
         token = Token(self.state, self.lexeme)
-        return token, index
+        return token, index + 1
 
     def is_delimiter(self):
         return self.state >= 100
@@ -94,7 +94,7 @@ class Lexer:
             return 14
         elif symbol == '\"':
             return 15
-        elif symbol == ' ' or symbol == '\n' or symbol == '\t':
+        elif symbol.isspace():
             return 16
         elif symbol == '|':
             return 17
@@ -112,7 +112,7 @@ class Lexer:
             return 23
         elif symbol == ',':
             return 24
-        elif symbol == '':
+        elif symbol == ';':
             return 25
         elif symbol == '(':
             return 26

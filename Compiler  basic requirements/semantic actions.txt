@@ -3,90 +3,112 @@
     Process*
 
 Variable Declaration:
-    .ID #701
-        Add ID to symbols table
+    .ID #1001
+        Push last token to factor_pile
 
-        ... fill with process
-
-    .TYPE #702
-        Fill type of variables in the symbols table
-
-        ... fill with process x2
+    .TYPE #1002
+        Last token indicates type
+        insert all factors from factor_pile to symbols_table with given type
 
 Factors:
-    .FACTOR_ID #703
-        Push last token to factor_pile
-        ? may need to resolve type
-
-    .FACTOR_INT #704
+    .FACTOR_ID #1003
         Push last token to factor_pile
 
-    .FACTOR_REAL #705
+    .FACTOR_INT #1004
         Push last token to factor_pile
 
-    .FACTOR_CHAR #706
+    .FACTOR_REAL #1005
         Push last token to factor_pile
 
-    .FACTOR_STR #707
+    .FACTOR_CHAR #1006
+        Push last token to factor_pile
+
+    .FACTOR_STR #1007
         Push last token to factor_pile
 
 Operations:
-    .OPERATOR #708
+    .OPERATOR #1008
         Push last token to operator_pile
 
-    .OR #709
-        Evaluate disjunction
-        Push result to factor_pile
+    .OR #1009
+        If top of operator_pile is OR
+            Evaluate disjunction
+            Push result to factor_pile
 
-    .AND #710
-        Evaluate conjunction
-        Push result to factor_pile
+    .AND #1010
+        if top of operator_pile is AND
+            Evaluate conjunction
+            Push result to factor_pile
 
-    .NOT #711
-        Evaluate negation
-        Push result to factor_pile
+    .NOT #1011
+        if top of operator_pile is NOT
+            Evaluate negation
+            Push result to factor_pile
 
-    .RELATIONAL #712
-        Evaluate relation
-        Push result to factor_pile
+    .RELATIONAL #1012
+        if top of operator_pile is RELATIONAL
+            Evaluate relation
+            Push result to factor_pile
 
-    .ADDITION #713
-        Evaluate addition or substraction
-        Push result to factor_pile
+    .ADDITION #1013
+        if top of operator_pile is + or -
+            Evaluate addition or substraction
+            Push result to factor_pile
 
-    .MULTIPLICATION #714
-        Evaluate multiplication, division or modulo
-        Push result to factor_pile
+    .MULTIPLICATION #1014
+        if top of operator_pile is * or / or
+            Evaluate multiplication, division or modulo
+            Push result to factor_pile
 
-    .ASSIGNMENT #715
+    .ASSIGNMENT #1015
         Evaluate assignment
 
 Statement:
-    .BOTTOM #716
-        Add false bottom in operator_pile
+    .BOTTOM #1016
+        Add false bottom to operator_pile
 
-    .BOTTOM_D #717
-        Remove false bottom in operator_pile
+    .BOTTOM_D #1017
+        Remove false bottom from operator_pile
 
-    .GO_TO_TRUE #718
+    .GO_TO_TRUE #1018
         Generate jump if top of factor_pile has boolean value TRUE
         Push instruction counter to jump_pile
 
-    .GO_TO_FALSE #719
+    .GO_TO_FALSE #1019
         Generate jump if top of factor_pile has boolean value FALSE
         Push instruction counter to jump_pile
 
-    .GO_TO #720
+    .GO_TO #1020
         Generate inconditional jump
         Push instruction counter to jump_pile
 
-    .FILL_JUMP #721
+    .FILL_JUMP #1021
         Pop jump_pile
         Fill pending jump (go to) wiht following instruction direction
 
+    .BOTTOM_F #1025
+        Add false bottom to factor_pile
+
+    .BOTTOM_F_D #1026
+        Remove false bottom from factor_pile
+
 Extra:
-    .READ #722
+    .READWRITE #1022
+        if top of operator_pile is read or write
+            Evaluate read or write
 
-    .WRITE #723
+    .READWRITE_O #1023
+        if top of operator_pile is read or write
+            Remove operator
 
-    .ENTER #724
+    .INCREMENT #1028
+        pop factor_pile
+        increment factor
+
+    .FOR_COMPARISON #1029
+        Get last quadruple op1 (left hand of assignment)
+        push it to factor_pile
+        push it to factor_pile
+        push > to operator_pile
+
+    .ENTER #1024

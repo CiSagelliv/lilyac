@@ -1,6 +1,6 @@
 from typing import List
 import lilyac
-from lilyac import Error
+from lilyac import Token, Symbol, Error, SemanticAction
 
 
 class Parser:
@@ -15,20 +15,27 @@ class Parser:
 
     def step(self, token):
         while True:
-            top = symbols.pop()
-            if top == token:
+            top = self.symbols.pop()
+            if isinstance(top, SemanticAction):
+                return top
+            elif top == token:
                 return top
             elif top.terminal:
                 return Error(lilyac.ERROREXPECT,
                              expected=str(top), found=str(token))
             else:
-                column = Parser.hash_token(top)
+                column = Parser.hash_token(token)
                 row = top.grammeme
                 production = lilyac.predictions[row][column]
                 if production < 600:
-                    symbols += lilyac.derivations.get(production, [])
+                    derivation = lilyac.derivations.get(production, [])
+                    self.symbols += derivation[::-1]
                 else:
-                    return Error(lilyac.ERRORDERIVE)
+                    return Error(lilyac.ERRORDERIVE, expected=top, found=token)
+
+    def is_semantic_action(self) -> bool:
+        top = self.symbols[-1]
+        return isinstance(top, SemanticAction)
 
     @staticmethod
     def hash_token(token):
