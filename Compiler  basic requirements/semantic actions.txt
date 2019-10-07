@@ -4,19 +4,15 @@
 
 Variable Declaration:
     .ID #701
-        Add ID to symbols table
-
-        ... fill with process
+        Push last token to factor_pile
 
     .TYPE #702
-        Fill type of variables in the symbols table
-
-        ... fill with process x2
+        Last token indicates type
+        insert all factors from factor_pile to symbols_table with given type
 
 Factors:
     .FACTOR_ID #703
         Push last token to factor_pile
-        ? may need to resolve type
 
     .FACTOR_INT #704
         Push last token to factor_pile
