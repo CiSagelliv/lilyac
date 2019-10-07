@@ -15,35 +15,35 @@ STATEMENTS:
 STATEMENT:
     ;
 ASSIGNMENT:
-    ;
+    ; :
 EXPRESSION_0:
-    ; ) ,
+    ; ) , :
 DISJUNCTION:
-    ; ) ,
+    ; ) , :
 EXPRESSION_1:
-    || ; ) ,
+    || ; ) , :
 CONJUNCTION:
-    || ; ) ,
+    || ; ) , :
 EXPRESSION_2:
-    && || ; ) ,
+    && || ; ) , :
 NEGATION:
     ID CONST_INTEGER CONST_REAL CONST_REAL_SCI CONST_CHAR CONST_STRING (
 EXPRESSION_3:
-    && || ; ) ,
+    && || ; ) , :
 COMPARISON:
-    && || ; ) ,
+    && || ; ) , :
 RELATIONAL_OPERATOR:
     ID CONST_INTEGER CONST_REAL CONST_REAL_SCI CONST_CHAR CONST_STRING (
 EXPRESSION_4:
-    == != < <= > >= && || ; ) ,
+    == != < <= > >= && || ; ) , :
 ADDITION:
-    == != < <= > >= && || ; ) ,
+    == != < <= > >= && || ; ) , :
 ADDEND:
-    + - == != < <= > >= && || ; ) ,
+    + - == != < <= > >= && || ; ) , :
 MULTIPLICATION:
-    + - == != < <= > >= && || ; ) ,
+    + - == != < <= > >= && || ; ) , :
 FACTOR:
-    * / % + - == != < <= > >= && || ; ) ,
+    * / % + - == != < <= > >= && || ; ) , :
 IF:
     ;
 ELSE:

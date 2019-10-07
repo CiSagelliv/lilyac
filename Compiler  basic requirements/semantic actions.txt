@@ -101,4 +101,14 @@ Extra:
         if top of operator_pile is read or write
             Remove operator
 
+    .INCREMENT #1028
+        pop factor_pile
+        increment factor
+
+    .FOR_COMPARISON #1029
+        Get last quadruple op1 (left hand of assignment)
+        push it to factor_pile
+        push it to factor_pile
+        push > to operator_pile
+
     .ENTER #1024

@@ -79,7 +79,6 @@ class Symbol:
             grammeme = 'Write statement'
         elif self.grammeme == lilyac.ENTER:
             grammeme = 'Enter statement'
-
         return f'<{grammeme}>'
 
     def __str__(self):
@@ -518,6 +517,27 @@ class SemanticAction(Symbol):
             if (operator.grammeme == lilyac.RESERVED
                and (operator.lexeme == 'read' or operator.lexeme == 'write')):
                 im.operator_pile.pop()
+        elif self.grammeme == lilyac._FOR_COMPARISON:
+            op1 = im.quadruples[-1][1]
+            op1_token = Token(lilyac.IDENTIFIER, op1)
+            im.factor_pile.append(op1_token)
+            im.factor_pile.append(op1_token)
+            operator_token = Token(lilyac.GREATERTHAN, '>')
+            im.operator_pile.append(operator_token)
+        elif self.grammeme == lilyac._INCREMENT:
+            op1 = im.factor_pile.pop()
+            result = im.new_temporal()
+            im.generate_quadruple(
+                operator='+',
+                op1=op1.lexeme,
+                op2=1,
+                result=result,
+            )
+            im.generate_quadruple(
+                operator='=',
+                op1=op1.lexeme,
+                result=result,
+            )
         elif self.grammeme == lilyac._ENTER:
             operator = 'enter'
             return im.generate_quadruple(
@@ -547,34 +567,65 @@ class Type(Enum):
         return self.__repr__()
 
     def __add__(self, other):
-        if ...:
-            pass
-        elif self.value == Type.integer and other.value == Type.integer:
-            return Type.integer
+        if self.value == Type.integer:
+            if other.value == Type.integer:
+                return Type.integer
+            elif other.value == Type.float:
+                return Type.float
+        elif self.value == Type.float:
+            if other.value == Type.integer:
+                return Type.float
+            elif other.value == Type.float:
+                return Type.float
         else:
             return Type.Error
 
     def __sub__(self, other):
-        if ...:
-            pass
+        if self.value == Type.integer:
+            if other.value == Type.integer:
+                return Type.integer
+            elif other.value == Type.float:
+                return Type.float
+        elif self.value == Type.float:
+            if other.value == Type.integer:
+                return Type.float
+            elif other.value == Type.float:
+                return Type.float
         else:
             return Type.Error
 
     def __mul__(self, other):
-        if ...:
-            pass
+        if self.value == Type.integer:
+            if other.value == Type.integer:
+                return Type.integer
+            elif other.value == Type.float:
+                return Type.float
+        elif self.value == Type.float:
+            if other.value == Type.integer:
+                return Type.float
+            elif other.value == Type.float:
+                return Type.float
         else:
             return Type.Error
 
     def __truediv__(self, other):
-        if ...:
-            pass
+        if self.value == Type.integer:
+            if other.value == Type.integer:
+                return Type.float
+            elif other.value == Type.float:
+                return Type.float
+        elif self.value == Type.float:
+            if other.value == Type.integer:
+                return Type.float
+            elif other.value == Type.float:
+                return Type.float
         else:
             return Type.Error
 
     def __mod__(self, other):
-        if ...:
-            pass
+        if self.value == Type.integer:
+            if other.value == Type.integer:
+                return Type.integer
         else:
             return Type.Error
 
