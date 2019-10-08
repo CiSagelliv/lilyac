@@ -80,7 +80,6 @@ Statement:
 
     .GO_TO #1020
         Generate inconditional jump
-        Push instruction counter to jump_pile
 
     .FILL_JUMP #1021
         Pop jump_pile

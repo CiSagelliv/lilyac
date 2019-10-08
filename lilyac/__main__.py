@@ -7,46 +7,7 @@ import os
 def main():
     if len(sys.argv) > 1:
         file = sys.argv[1]
-        code: str = ''
-        with open(file) as f:
-            code = f.read() + ' '
-        lexer = Lexer()
-        parser = Parser()
-        intermediate = Intermediate()
-        i = 0
-        error = False
-        while i < len(code) and len(parser.symbols) > 0:
-            if parser.is_semantic_action():
-                action = parser.symbols.pop()
-                result = intermediate.step(action)
-                if isinstance(result, Error):
-                    error = True
-                    print(result)
-            else:
-                token, i = lexer.generate_token(i, code)
-                if isinstance(token, Error):
-                    error = True
-                    print(token)
-                    break
-                while True:
-                    new_token = parser.step(token)
-                    if isinstance(new_token, Error):
-                        error = True
-                        print(new_token)
-                        break
-                    elif isinstance(new_token, Token):
-                        break
-                    result = intermediate.step(new_token)
-                    if isinstance(result, Error):
-                        error = True
-                        print(result)
-                result = intermediate.step(token)
-                if isinstance(result, Error):
-                    error = True
-                    print(result)
-        if not error:
-            print('Succesfully compiled')
-            save_code(file, intermediate.quadruples)
+        compile(file)
     else:
         app = QApplication(sys.argv)
         ex = compiler()
@@ -55,6 +16,49 @@ def main():
 
 def __main__():
     main()
+
+
+def compile(file):
+    code: str = ''
+    with open(file) as f:
+        code = f.read() + ' '
+    lexer = Lexer()
+    parser = Parser()
+    intermediate = Intermediate()
+    i = 0
+    while i < len(code) and len(parser.symbols) > 0:
+        if parser.is_semantic_action():
+            action = parser.symbols.pop()
+            result = intermediate.step(action)
+            if isinstance(result, Error):
+                print(result)
+                return
+        else:
+            token, i = lexer.generate_token(i, code)
+            if isinstance(token, Error):
+                error = True
+                print(token)
+                return
+            while True:
+                new_token = parser.step(token)
+                if isinstance(new_token, Error):
+                    error = True
+                    print(new_token)
+                    return
+                elif isinstance(new_token, Token):
+                    break
+                result = intermediate.step(new_token)
+                if isinstance(result, Error):
+                    error = True
+                    print(result)
+                    return
+            result = intermediate.step(token)
+            if isinstance(result, Error):
+                error = True
+                print(result)
+                return
+    print('Succesfully compiled')
+    save_code(file, intermediate.quadruples)
 
 
 def save_code(file, quadruples):
@@ -67,6 +71,11 @@ def save_code(file, quadruples):
             operator, op1, op2, result = quadruple
             op1 = op1.lexeme if op1 else ''
             op2 = op2.lexeme if op2 else ''
+            if result:
+                if isinstance(result, Token):
+                    result = result.lexeme
+            else:
+                result = ''
             line = f'{i},{operator},{op1},{op2},{result}\n'
             encoded_line = bytes(line, 'utf-8')
             f.write(encoded_line)

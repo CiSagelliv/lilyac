@@ -327,7 +327,7 @@ class Error(Symbol):
         elif self.grammeme == lilyac.ERRORDERIVE:
             return f'Syntax Error: Invalid derivation: Expected a {self.expected}, but found: {self.found}'
         elif self.grammeme == lilyac.ERRORTYPEOP:
-            return f'Semantic Error: Invalid operation'
+            return f'Semantic Error: Invalid operation: Operation: {self.expected} returned {self.found}'
         elif self.grammeme == lilyac.ERRORUNDECL:
             return f'Semantic Error: Undeclared variable: {self.expected}'
         else:
@@ -390,7 +390,7 @@ class SemanticAction(Symbol):
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                im.factor_pile.append(result)
                 return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1,
@@ -404,7 +404,7 @@ class SemanticAction(Symbol):
                     im.operator_pile.pop()
                     op1 = im.factor_pile.pop()
                     result = im.new_temporal()
-                    im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                    im.factor_pile.append(result)
                     return im.generate_quadruple(
                         operator=operator.lexeme,
                         op1=op1,
@@ -424,7 +424,7 @@ class SemanticAction(Symbol):
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                im.factor_pile.append(result)
                 return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1,
@@ -439,7 +439,7 @@ class SemanticAction(Symbol):
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                im.factor_pile.append(result)
                 return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1,
@@ -453,7 +453,7 @@ class SemanticAction(Symbol):
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
                 result = im.new_temporal()
-                im.factor_pile.append(Token(lilyac.IDENTIFIER, result))
+                im.factor_pile.append(result)
                 return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1,
@@ -469,7 +469,7 @@ class SemanticAction(Symbol):
                 return im.generate_quadruple(
                     operator=operator.lexeme,
                     op1=op1,
-                    result=result.lexeme,
+                    result=result,
                 )
         elif self.grammeme == lilyac._BOTTOM:
             im.operator_pile.append(False)
@@ -493,9 +493,10 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._GO_TO:
             operator = 'JI'
-            im.jump_pile.append(im.counter)
+            result = Token(lilyac.INTEGER, im.jump_pile[-1] + 1)
             return im.generate_quadruple(
                 operator=operator,
+                result=result
             )
         elif self.grammeme == lilyac._FILL_JUMP:
             instruction = im.jump_pile.pop()
@@ -510,7 +511,7 @@ class SemanticAction(Symbol):
                 result = im.factor_pile.pop()
                 return im.generate_quadruple(
                     operator=operator.lexeme,
-                    result=result.lexeme,
+                    result=result,
                 )
         elif self.grammeme == lilyac._READWRITE_O:
             operator = im.operator_pile[-1]
@@ -566,63 +567,63 @@ class Type(Enum):
         return self.__repr__()
 
     def __add__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.integer
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.float
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
         else:
             return Type.Error
 
     def __sub__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.integer
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.float
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
         else:
             return Type.Error
 
     def __mul__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.integer
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.float
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
         else:
             return Type.Error
 
     def __truediv__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.float
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.float
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.float
         else:
             return Type.Error
 
     def __mod__(self, other):
-        if self.value == 1 and other.value == 1:
+        if self.value == Type.integer.value and other.value == Type.integer.value:
             return Type.integer
         else:
             return Type.Error
@@ -640,127 +641,126 @@ class Type(Enum):
             return Type.Error
 
     def __lt__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
         else:
             return Type.Error
 
     def __le__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
         else:
             return Type.Error
 
     def __eq__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
         else:
             return Type.Error
 
     def __ne__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif (self.value == Type.character.value
+              and other.value == Type.character.value):
             return Type.boolean
         else:
             return Type.Error
 
     def __gt__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif (self.value == Type.character.value
+              and other.value == Type.character.value):
             return Type.boolean
         else:
             return Type.Error
 
     def __ge__(self, other):
-        if self.value == 1:
-            if other.value == 1:
+        if self.value == Type.integer.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 2:
-            if other.value == 1:
+        elif self.value == Type.float.value:
+            if other.value == Type.integer.value:
                 return Type.boolean
-            elif other.value == 2:
+            elif other.value == Type.float.value:
                 return Type.boolean
-        elif self.value == 3 and other.value == 3:
+        elif (self.value == Type.character.value
+              and other.value == Type.character.value):
             return Type.boolean
         else:
             return Type.Error
 
     @staticmethod
     def write(factor):
-        return factor.value
+        return factor
 
     @staticmethod
     def read(factor):
-        return factor.value
+        return factor
 
     @staticmethod
     def JF(factor):
-        if factor.value == 5:
+        if factor.value == Type.boolean.value:
             return Type.Jump
         else:
             return Type.Error
 
     @staticmethod
     def JT(factor):
-        if factor.value == 5:
+        if factor.value == Type.boolean.value:
             return Type.Jump
         else:
             return Type.Error
 
     @staticmethod
     def JI():
-        return Type.Jump
-
-    @staticmethod
-    def read():
         return Type.Jump

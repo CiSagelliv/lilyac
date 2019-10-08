@@ -32,7 +32,7 @@ class Intermediate:
 
     def generate_quadruple(self,
                            operator: str = '', op1: Token = None,
-                           op2: Token = None, result: str = ''):
+                           op2: Token = None, result: Token = None):
         quadruple = [operator, op1, op2, result]
         result = self.check_quadruple(quadruple)
         self.counter += 1
@@ -43,9 +43,19 @@ class Intermediate:
     def check_quadruple(self, quadruple: List):
         operator, op1, op2, result = quadruple
         type_r = Type.Error
-        if operator in nonary_operators:
+        print(quadruple)
+        if operator == '=':
+            type_1 = self.get_type(op1)
+            type_2 = self.get_type(result)
+            if type_1.value == type_2.value:
+                return
+        elif operator in nonary_operators:
             operation = nonary_operators[operator]
             type_r = operation()
+        elif operator in special_operators:
+            type_1 = self.get_type(result)
+            operation = special_operators[operator]
+            type_r = operation(type_1)
         elif operator in unary_operators:
             type_1 = self.get_type(op1)
             operation = unary_operators[operator]
@@ -55,11 +65,11 @@ class Intermediate:
             type_2 = self.get_type(op2)
             operation = binary_operators[operator]
             type_r = operation(type_1, type_2)
-        if type_r != Type.Error:
-            self.symbols_table[result] = type_r
-            return
-        else:
-            return Error(lilyac.ERRORTYPEOP)
+        print(quadruple)
+        if type_r.value == Type.Error.value:
+            return Error(lilyac.ERRORTYPEOP, expected=operator, found=type_r)
+        elif result:
+            self.symbols_table[result.lexeme] = type_r
 
     def get_type(self, op: Token):
         if op.grammeme == lilyac.IDENTIFIER:
@@ -82,10 +92,16 @@ class Intermediate:
 
     def new_temporal(self):
         self.temporal_counter += 1
-        temporal = f'R{self.temporal_counter}'
-        self.symbols_table[temporal] = ''
+        lexeme = f'R{self.temporal_counter}'
+        temporal = Token(lilyac.IDENTIFIER, lexeme)
+        self.symbols_table[lexeme] = None
         return temporal
 
+
+special_operators = {
+    'write': Type.write,
+    'read': Type.read,
+}
 
 nonary_operators = {
     'JI': Type.JI,
@@ -95,8 +111,7 @@ nonary_operators = {
 unary_operators = {
     r'!': lambda x: not x,
     'JF': Type.JF,
-    'JT': Type.JT
-    # Add rest of operations
+    'JT': Type.JT,
 }
 
 binary_operators = {
