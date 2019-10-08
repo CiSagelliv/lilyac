@@ -247,10 +247,12 @@ class Token(Symbol):
 
 
 class Error(Symbol):
-    ''' Type of symbol returned by the lexer when a lexical error is found
+    ''' Type of symbol describing an Error
 
-        It is considered a subclass of Symbol as both Token and Error
-        have grammemes defined by the finishing state of the lexer's automata
+        It may represent errors of:
+        - Lexicon
+        - Syntax
+        - Semantics
     '''
 
     def __init__(self, grammeme: int, **kwargs):
