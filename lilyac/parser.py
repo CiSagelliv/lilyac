@@ -21,6 +21,7 @@ class Parser:
             elif top == token:
                 return top
             elif top.terminal:
+                # Non-coinciding terminal symbols
                 return Error(lilyac.ERROREXPECT,
                              expected=str(top), found=str(token))
             else:
@@ -29,8 +30,10 @@ class Parser:
                 production = lilyac.predictions[row][column]
                 if production < 600:
                     derivation = lilyac.derivations.get(production, [])
+                    # Add all symbols from the derivation in opposite order
                     self.symbols += derivation[::-1]
                 else:
+                    # Invalid derivation
                     return Error(lilyac.ERRORDERIVE, expected=top, found=token)
 
     def is_semantic_action(self) -> bool:
@@ -39,6 +42,9 @@ class Parser:
 
     @staticmethod
     def hash_token(token):
+        ''' Hash tokens from the input language to
+            the corresponding column index of the prediction matrix
+        '''
         if token.grammeme == lilyac.RESERVED:
             if (token.lexeme == 'class'):
                 return 0

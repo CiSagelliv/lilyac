@@ -3,7 +3,7 @@ import controles.lye;
  
 class miclase
 begin
-def A,B, ready as integer;
+def A,B, ready, res as integer;
  
 write("Hola Mundo!!");
     enter;
@@ -13,5 +13,5 @@ write("Hola Mundo!!");
     else
         res = A - B;
     endif;
-    write("Resultado = ", res); 
+    write("Resultado = "); 
 end

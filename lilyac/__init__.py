@@ -6,8 +6,12 @@ from .compiler_int import compiler
 
 from typing import List, Dict
 
-# Lexicon
-# Terminals
+
+''' Lexicon '''
+''' Terminal states
+
+    Code values: 101 - 199
+'''
 RESERVED: int = 101
 IDENTIFIER: int = 102
 LIBRARY: int = 103
@@ -43,7 +47,11 @@ BRACKETSCLOSE: int = 132
 SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
-# Lexical Errors
+
+''' Lexical Errors
+
+    Code values: 501 - 599
+'''
 ERRORIDENTIFIER: int = 501
 ERRORLIBRARY: int = 502
 ERRORFLOAT: int = 503
@@ -53,113 +61,6 @@ ERROROR: int = 506
 ERRORAND: int = 507
 ERRORUNKNOWNL: int = 599
 
-# Syntax Errors
-ERRORPH_0: int = 601
-ERRORPH_1: int = 602
-ERROREVD: int = 603
-ERROREVID: int = 604
-ERRORVARD: int = 605
-ERRORINVTY: int = 606
-ERROREVST: int = 607
-ERRORISOST_O: int = 608
-ERRORISOST_1: int = 609
-ERRORISOEX_0: int = 610
-ERRORINVE_0: int = 611
-ERRORISOEX_1: int = 612
-ERRORINVE_1: int = 613
-ERRORISOEX_2: int = 614
-ERRORINVE_2: int = 615
-ERRORISOEX_3: int = 616
-ERRORINVE_3: int = 617
-ERRORINVE_4: int = 618
-ERRORISOEX_4: int = 619
-ERRORINVE_5: int = 620
-ERRORISOEX_5: int = 621
-ERRORINVE_6: int = 622
-ERRORISOEX_6: int = 623
-ERRORIFST_1: int = 624
-ERRORIFST_2: int = 625
-ERRORWHLOOP: int = 626
-ERRORFOR: int = 627
-ERROREXIN_0: int = 628
-ERROREXIN_1: int = 629
-ERRORREAD: int = 630
-ERRORWRITE: int = 631
-ERRORENTER: int = 632
-ERROREXPECT: int = 633
-ERRORDERIVE: int = 634
-ERRORUNKNOWNP: int = 699
-
-# Semantic Errors
-ERRORTYPEOP: int = 701
-ERRORUNDECL: int = 702
-ERRORUNKNOWNS: int = 799
-
-# Syntax
-END_OF_FILE: int = -1
-PROGRAM: int = 0
-DECL_LIBRARIES: int = 1
-DECL_VARIABLES: int = 2
-VARIABLES: int = 3
-MORE_VARIABLES: int = 4
-TYPE: int = 5
-STATEMENTS: int = 6
-STATEMENT: int = 7
-ASSIGNMENT: int = 8
-EXPRESSION_0: int = 9
-DISJUNCTION: int = 10
-EXPRESSION_1: int = 11
-CONJUNCTION: int = 12
-EXPRESSION_2: int = 13
-NEGATION: int = 14
-EXPRESSION_3: int = 15
-COMPARISON: int = 16
-RELATIONAL_OPERATOR: int = 17
-EXPRESSION_4: int = 18
-ADDITION: int = 19
-ADDEND: int = 20
-MULTIPLICATION: int = 21
-FACTOR: int = 22
-IF: int = 23
-ELSE: int = 24
-WHILE: int = 25
-FOR: int = 26
-EXPRESSIONS: int = 27
-MORE_EXPRESSIONS: int = 28
-READ: int = 29
-WRITE: int = 30
-ENTER: int = 31
-
-# Semantic actions
-_ID: int = 1001
-_TYPE: int = 1002
-_FACTOR_ID: int = 1003
-_FACTOR_INT: int = 1004
-_FACTOR_REAL: int = 1005
-_FACTOR_CHAR: int = 1006
-_FACTOR_STR: int = 1007
-_OPERATOR: int = 1008
-_OR: int = 1009
-_AND: int = 1010
-_NOT: int = 1011
-_RELATIONAL: int = 1012
-_ADDITION: int = 1013
-_MULTIPLICATION: int = 1014
-_ASSIGNMENT: int = 1015
-_BOTTOM: int = 1016
-_BOTTOM_D: int = 1017
-_GO_TO_TRUE: int = 1018
-_GO_TO_FALSE: int = 1019
-_GO_TO: int = 1020
-_FILL_JUMP: int = 1021
-_FILL_JUMP_1: int = 1022
-_READWRITE: int = 1023
-_READWRITE_O: int = 1024
-_ENTER: int = 1025
-_BOTTOM_F: int = 1026
-_BOTTOM_F_D: int = 1027
-_FOR_COMPARISON: int = 1028
-_INCREMENT: int = 1029
 
 reserved_words: List[str] = [
     'class',
@@ -192,6 +93,17 @@ reserved_words: List[str] = [
 ]
 
 
+''' Transition matrix
+
+    Defines the transition function δ of the lexer's automaton
+    δ: Q ✖ S -> Q
+
+    Q := States
+    S := Input alphabet
+
+    Rows correspond to states
+    Columns correspond to symbols from the alphabet
+'''
 transitions: List[List[int]] = [
     [2,   1,   1,   1,   1,   2,   10,  599, 19,  7,   20,  21,  22,  35,  16,  18,  0,   23,  25,  27,  28,  30,  34,  36,  126, 128, 129, 130, 131, 132, 133, 134, 599],
     [2,   1,   1,   1,   1,   2,   2,   3,   101, 101, 101, 101, 101, 4,   101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101],
@@ -233,6 +145,103 @@ transitions: List[List[int]] = [
 ]
 
 
+''' Syntax '''
+''' Non-terminal Symbols
+
+    Code values: -1 - 100
+'''
+END_OF_FILE: int = -1
+PROGRAM: int = 0
+DECL_LIBRARIES: int = 1
+DECL_VARIABLES: int = 2
+VARIABLES: int = 3
+MORE_VARIABLES: int = 4
+TYPE: int = 5
+STATEMENTS: int = 6
+STATEMENT: int = 7
+ASSIGNMENT: int = 8
+EXPRESSION_0: int = 9
+DISJUNCTION: int = 10
+EXPRESSION_1: int = 11
+CONJUNCTION: int = 12
+EXPRESSION_2: int = 13
+NEGATION: int = 14
+EXPRESSION_3: int = 15
+COMPARISON: int = 16
+RELATIONAL_OPERATOR: int = 17
+EXPRESSION_4: int = 18
+ADDITION: int = 19
+ADDEND: int = 20
+MULTIPLICATION: int = 21
+FACTOR: int = 22
+IF: int = 23
+ELSE: int = 24
+WHILE: int = 25
+FOR: int = 26
+EXPRESSIONS: int = 27
+MORE_EXPRESSIONS: int = 28
+READ: int = 29
+WRITE: int = 30
+ENTER: int = 31
+
+
+''' Syntax Errors
+
+    Code values: 601 - 699
+'''
+ERRORPH_0: int = 601
+ERRORPH_1: int = 602
+ERROREVD: int = 603
+ERROREVID: int = 604
+ERRORVARD: int = 605
+ERRORINVTY: int = 606
+ERROREVST: int = 607
+ERRORISOST_O: int = 608
+ERRORISOST_1: int = 609
+ERRORISOEX_0: int = 610
+ERRORINVE_0: int = 611
+ERRORISOEX_1: int = 612
+ERRORINVE_1: int = 613
+ERRORISOEX_2: int = 614
+ERRORINVE_2: int = 615
+ERRORISOEX_3: int = 616
+ERRORINVE_3: int = 617
+ERRORINVE_4: int = 618
+ERRORISOEX_4: int = 619
+ERRORINVE_5: int = 620
+ERRORISOEX_5: int = 621
+ERRORINVE_6: int = 622
+ERRORISOEX_6: int = 623
+ERRORIFST_1: int = 624
+ERRORIFST_2: int = 625
+ERRORWHLOOP: int = 626
+ERRORFOR: int = 627
+ERROREXIN_0: int = 628
+ERROREXIN_1: int = 629
+ERRORREAD: int = 630
+ERRORWRITE: int = 631
+ERRORENTER: int = 632
+ERROREXPECT: int = 633
+ERRORDERIVE: int = 634
+ERRORUNKNOWNP: int = 699
+
+
+''' Prediction Matrix
+
+    Used by the parser to determine appropiate derivation of
+    non-terminal symbols according to encountered terminal symbol
+
+    Defines the prediction function P for the grammar
+
+    P: V ✖ Σ -> R
+
+    V := Non-terminal symbols
+    Σ := Terminal symbols
+    R := Productions
+
+    Rows correspond to non-terminal symbols
+    Columns correspond to terminal symbols
+'''
 predictions: List[List[int]] = [
     [0,   601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 0,   601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601, 601],
     [2,   602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 1,   602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602, 602],
@@ -268,6 +277,64 @@ predictions: List[List[int]] = [
     [632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 67,  632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632, 632]
 ]
 
+
+''' Semantics '''
+''' Semantic actions
+
+    Code values: 1001 - 1099
+'''
+_ID: int = 1001
+_TYPE: int = 1002
+_FACTOR_ID: int = 1003
+_FACTOR_INT: int = 1004
+_FACTOR_REAL: int = 1005
+_FACTOR_CHAR: int = 1006
+_FACTOR_STR: int = 1007
+_OPERATOR: int = 1008
+_OR: int = 1009
+_AND: int = 1010
+_NOT: int = 1011
+_RELATIONAL: int = 1012
+_ADDITION: int = 1013
+_MULTIPLICATION: int = 1014
+_ASSIGNMENT: int = 1015
+_BOTTOM: int = 1016
+_BOTTOM_D: int = 1017
+_GO_TO_TRUE: int = 1018
+_GO_TO_FALSE: int = 1019
+_GO_TO: int = 1020
+_GO_TO_BACK: int = 1021
+_FILL_JUMP: int = 1022
+_FILL_JUMP_1: int = 1023
+_BOTTOM_F: int = 1024
+_BOTTOM_F_D: int = 1025
+_READWRITE: int = 1026
+_READWRITE_O: int = 1027
+_INCREMENT: int = 1028
+_FOR_COMPARISON: int = 1029
+_ENTER: int = 1030
+
+
+''' Semantic Errors
+
+    Code values: 701 - 799
+'''
+ERRORTYPEOP: int = 701
+ERRORUNDECL: int = 702
+ERRORUNKNOWNS: int = 799
+
+
+''' Productions
+
+    Productions R of the context-free grammar of the language
+    Missing key values correspond to empty derivations
+
+    R: V -> (V U Σ)*
+
+    Note:
+        Semantic actions are inserted in the productions
+        to avoid having to traverse the syntax diagrams twice
+'''
 derivations: Dict = {
     0: [
         Symbol(DECL_LIBRARIES),
@@ -505,7 +572,7 @@ derivations: Dict = {
         SemanticAction(_GO_TO_TRUE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
-        SemanticAction(_GO_TO),
+        SemanticAction(_GO_TO_BACK),
         SemanticAction(_FILL_JUMP),
     ],
     61: [
@@ -521,7 +588,7 @@ derivations: Dict = {
         Symbol(STATEMENTS),
         SemanticAction(_INCREMENT),
         Token(RESERVED, 'endfor'),
-        SemanticAction(_GO_TO),
+        SemanticAction(_GO_TO_BACK),
         SemanticAction(_FILL_JUMP),
     ],
     62: [

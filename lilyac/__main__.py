@@ -66,7 +66,9 @@ def save_code(file, quadruples):
     if not os.path.exists('out'):
         os.makedirs('out')
     with open(f'out/{file}.q', 'wb') as f:
-        f.write(b'#,OPERATOR,OP1,OP2,RESULT\n')
+        header = '#,OPERATOR,OP1,OP2,RESULT\n'
+        encoded_header = bytes(header, 'utf-8')
+        f.write(encoded_header)
         for i, quadruple in enumerate(quadruples):
             operator, op1, op2, result = quadruple
             op1 = op1.lexeme if op1 else ''
