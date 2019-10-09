@@ -373,7 +373,69 @@ class SemanticAction(Symbol):
         super().__init__(grammeme)
 
     def __repr__(self):
-        return str(self.grammeme)
+        description: ''
+        if self.grammeme == lilyac._ID:
+            description = 'Declare variable'
+        elif self.grammeme == lilyac._TYPE:
+            description = 'Assign type'
+        elif self.grammeme == lilyac._FACTOR_ID:
+            description = 'Found an identifier and push it to factor_pile'
+        elif self.grammeme == lilyac._FACTOR_INT:
+            description = 'Found an integer number and push it to factor_pile'
+        elif self.grammeme == lilyac._FACTOR_REAL:
+            description = 'Found a real number and push it to factor_pile'
+        elif self.grammeme == lilyac._FACTOR_CHAR:
+            description = 'Found a character and push it to factor_pile'
+        elif self.grammeme == lilyac._FACTOR_STR:
+            description = 'Found a string and push it to factor_pile'
+        elif self.grammeme == lilyac._OPERATOR:
+            description = 'Found an operator and push it to its pile'
+        elif self.grammeme == lilyac._OR:
+            description = 'Found an OR operator and push it to its pile'
+        elif self.grammeme == lilyac._AND:
+            description = 'Found an AND operator and push it to its pile'
+        elif self.grammeme == lilyac._NOT:
+            description = 'Found a NOT operator and push it to its pile'
+        elif self.grammeme == lilyac._RELATIONAL:
+            description = 'Found a RELATIONAL operator and push it to its pile'
+        elif self.grammeme == lilyac._ADDITION:
+            description = 'Found a Plus sign or minus sign and push it operator_pile'
+        elif self.grammeme == lilyac.MULTIPLICATION:
+            description = 'Found a times sign, over sign or modulo and push it to operator_pile'
+        elif self.grammeme == lilyac._ASSIGNMENT:
+            description = 'Found an equal sign and push it to operator_pile'
+        elif self.grammeme == lilyac._BOTTOM:
+            description = ...
+        elif self.grammeme == lilyac._BOTTOM_D:
+            description = ...
+        elif self.grammeme == lilyac._GO_TO_TRUE:
+            description = ...
+        elif self.grammeme == lilyac._GO_TO_FALSE:
+            description = ...
+        elif self.grammeme == lilyac._GO_TO:
+            description = ...
+        elif self.grammeme == lilyac._GO_TO_BACK:
+            description = ...
+        elif self.grammeme == lilyac._FILL_JUMP:
+            description = ...
+        elif self.grammeme == lilyac._FILL_JUMP_1:
+            description = ...
+        elif self.grammeme == lilyac._BOTTOM_F:
+            description = ...
+        elif self.grammeme == lilyac._BOTTOM_F_D:
+            description = ...
+        elif self.grammeme == lilyac._READWRITE:
+            description = ...
+        elif self.grammeme == lilyac._READWRITE_O:
+            description = ...
+        elif self.grammeme == lilyac._INCREMENT:
+            description = ...
+        elif self.grammeme == lilyac._FOR_COMPARISON:
+            description = ...
+        elif self.grammeme == lilyac._ENTER:
+            description = ...
+            return f'<Semantic Action: {description}>'
+
 
     def __str__(self):
         return self.__repr__()
