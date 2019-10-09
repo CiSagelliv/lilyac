@@ -1,8 +1,9 @@
 import sys
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
+from PyQt5.QtCore import (QTimer, QEventLoop)
 import os
 from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error
-from time import sleep
+import time
 
 
 class compiler(QDialog):
@@ -238,7 +239,6 @@ class compiler(QDialog):
         self.list_quad.clear()
         self.list_quad.addItems(self.quadruples_str)
 
-
     def view_piles(self):
          self.list_factor.clear()
          self.list_factor.addItems(self.factor_pile_str)
@@ -312,6 +312,9 @@ class compiler(QDialog):
                 action = self.parser.symbols.pop()
                 result = self.intermediate.step(action)
                 self.update_strings()
+                loop = QEventLoop()
+                QTimer.singleShot(1000, loop.quit)
+                loop.exec_()
                 self.view_types_quadruples()
                 self.view_piles()
                 if isinstance(result, Error):
@@ -340,6 +343,9 @@ class compiler(QDialog):
                         break
                     result = self.intermediate.step(new_token)
                     self.update_strings()
+                    loop = QEventLoop()
+                    QTimer.singleShot(1000, loop.quit)
+                    loop.exec_()
                     self.view_types_quadruples()
                     self.view_piles()
                     if isinstance(result, Error):
@@ -349,6 +355,9 @@ class compiler(QDialog):
                         return
                 result = self.intermediate.step(token)
                 self.update_strings()
+                loop = QEventLoop()
+                QTimer.singleShot(1000, loop.quit)
+                loop.exec_()
                 self.view_types_quadruples()
                 self.view_piles()
                 if isinstance(result, Error):
