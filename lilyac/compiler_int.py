@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog)
+from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
 import os
+from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error
 
 
 class compiler(QDialog):
@@ -35,6 +36,10 @@ class compiler(QDialog):
         }
 
         QPushButton#analyze_code{
+            background-color: #57A99A
+        }
+
+        QPushButton#despacito{
             background-color: #57A99A
         }
 
@@ -79,9 +84,17 @@ class compiler(QDialog):
             font-size: 20px;
             color: green;
         }
+
+        QLabel#lb_type{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
         """
 
         self.setGeometry(0, 30, 1500, 700)
+        print(self.height())
+        print(self.width())
         self.setWindowTitle('lilyac')
         self.setStyleSheet(self.stylesheet)
         self.show()
@@ -103,11 +116,16 @@ class compiler(QDialog):
         btn_analyze_code.setObjectName('analyze_code')
         btn_analyze_code.clicked.connect(self.go_to_analyze)
 
+        btn_analyze_despacito = QPushButton('Analyze despacito', self)
+        btn_analyze_despacito.setObjectName('despacito')
+        btn_analyze_despacito.clicked.connect(self.go_to_despacito)
+
         head_layout = QVBoxLayout()
         head_layout.addWidget(btn_open_file)
         head_layout.addWidget(btn_edit_text)
         head_layout.addWidget(btn_save_changes)
         head_layout.addWidget(btn_analyze_code)
+        head_layout.addWidget(btn_analyze_despacito)
 
         return head_layout
 
@@ -125,51 +143,59 @@ class compiler(QDialog):
     def quadruples(self):
         lb_quadruples = QLabel("Quadruples")
         lb_quadruples.setObjectName('lb_quadruples')
-        txt_quad = QPlainTextEdit()
+        #self.txt_quad = QPlainTextEdit()
+        self.list_quad = QListWidget()
+
+
+        lb_type = QLabel("Symbol")
+        lb_type.setObjectName('lb_type')
+        self.list_type = QListWidget()
 
         lb_error = QLabel("Error")
         lb_error.setObjectName('lb_error')
-        txt_error = QPlainTextEdit()
+        self.list_error = QListWidget()
 
         quad_layout = QVBoxLayout()
         quad_layout.addWidget(lb_quadruples)
-        quad_layout.addWidget(txt_quad)
+        quad_layout.addWidget(self.list_quad)
+        quad_layout.addWidget(lb_type)
+        quad_layout.addWidget(self.list_type)
         quad_layout.addWidget(lb_error)
-        quad_layout.addWidget(txt_error)
+        quad_layout.addWidget(self.list_error)
 
         return quad_layout
 
     def factor_pile(self):
         lb_factor = QLabel("factor_pile")
         lb_factor.setObjectName('lb_factor')
-        txt_factor = QPlainTextEdit()
+        self.list_factor = QListWidget()
 
         lb_operator = QLabel("operator_pile")
         lb_operator.setObjectName('lb_operator')
-        txt_operator = QPlainTextEdit()
+        self.list_operator = QListWidget()
 
         factor_layout = QVBoxLayout()
         factor_layout.addWidget(lb_factor)
-        factor_layout.addWidget(txt_factor)
+        factor_layout.addWidget(self.list_factor)
         factor_layout.addWidget(lb_operator)
-        factor_layout.addWidget(txt_operator)
+        factor_layout.addWidget(self.list_operator)
 
         return factor_layout
 
     def production_pile(self):
         lb_production = QLabel("production_pile")
         lb_production.setObjectName('production_pile')
-        txt_production = QPlainTextEdit()
+        self.list_production = QListWidget()
 
         lb_jump = QLabel("jump_pile")
         lb_jump.setObjectName('jump_pile')
-        txt_jump = QPlainTextEdit()
+        self.list_jump = QListWidget()
 
         production_layout = QVBoxLayout()
         production_layout.addWidget(lb_production)
-        production_layout.addWidget(txt_production)
+        production_layout.addWidget(self.list_production)
         production_layout.addWidget(lb_jump)
-        production_layout.addWidget(txt_jump)
+        production_layout.addWidget(self.list_jump)
 
         return production_layout
 
@@ -180,8 +206,8 @@ class compiler(QDialog):
         if filename[0]:
             f = open(filename[0], "r", encoding="utf8")
             with f:
-                data = f.read()
-                self.txt_code.appendPlainText(data)
+                self.data = f.read() + ''
+                self.txt_code.appendPlainText(self.data)
 
     def go_to_edit(self):
         self.txt_code.setReadOnly(False)
@@ -197,8 +223,55 @@ class compiler(QDialog):
                 f.close()
 
     def go_to_analyze(self):
-        pass
+        lexer = Lexer()
+        parser = Parser()
+        intermediate = Intermediate()
+        factor_pile_str = [str(factor) for factor in intermediate.factor_pile]
+        production_pile_str = [str(token) for token in parser.symbols]
+        operator_pile_str = [str(token) for token in intermediate.operator_pile]
+        quadruples_str = [str(quadruples) for quadruples in intermediate.quadruples]
+        jump_pile_str = [str(jump) for jump in intermediate.jump_pile ]
+        i = 0
+        while i < len(self.data) and len(parser.symbols) > 0:
+            if parser.is_semantic_action():
+                action = parser.symbols.pop()
+                result = intermediate.step(action)
+                self.list_quad.addItems(quadruples_str)
+                self.list_type.addItems(intermediate.symbols_table)
+                self.list_factor.addItems(factor_pile_str)
+                self.list_operator.addItems(operator_pile_str)
+                self.list_production.addItems(production_pile_str)
+                self.list_jump.addItems(jump_pile_str)
+                if isinstance(result, Error):
+                    print(result)
+                    return
+            else:
+                token, i = lexer.generate_token(i, self.data)
+                if isinstance(token, Error):
+                    error = True
+                    print(token)
+                    return
+                while True:
+                    new_token = parser.step(token)
+                    if isinstance(new_token, Error):
+                        error = True
+                        print(new_token)
+                        return
+                    elif isinstance(new_token, Token):
+                        break
+                    result = intermediate.step(new_token)
+                    if isinstance(result, Error):
+                        error = True
+                        print(result)
+                        return
+                result = intermediate.step(token)
+                if isinstance(result, Error):
+                    error = True
+                    print(result)
+                    return
 
+    def go_to_despacito(self):
+        pass
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
