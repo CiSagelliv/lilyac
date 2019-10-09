@@ -350,6 +350,8 @@ class Error(Symbol):
             return f'Syntax Error: Invalid derivation: Expected a {self.expected}, but found: {self.found}'
         elif self.grammeme == lilyac.ERRORTYPEOP:
             return f'Semantic Error: Invalid operation: Operation: {self.expected} returned {self.found}'
+        elif self.grammeme == lilyac.ERRORDOUBLDECL:
+            return f'Semantic Error: Double declaration of variable: {self.found}'
         elif self.grammeme == lilyac.ERRORUNDECL:
             return f'Semantic Error: Undeclared variable: {self.expected}'
         else:
@@ -388,7 +390,10 @@ class SemanticAction(Symbol):
             factor = im.factor_pile[-1]
             while factor:
                 im.factor_pile.pop()
-                im.symbols_table[factor.lexeme] = type_v
+                if factor.lexeme not in im.symbols_table:
+                    im.symbols_table[factor.lexeme] = type_v
+                else:
+                    return Error(lilyac.ERRORDOUBLDECL, found=factor.lexeme)
                 factor = im.factor_pile[-1]
         elif self.grammeme == lilyac._FACTOR_ID:
             im.factor_pile.append(im.last_token)
@@ -583,7 +588,7 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._BOTTOM_F:
             im.factor_pile.append(False)
-        elif self.grammeme == lilyac._BOTTOM_F:
+        elif self.grammeme == lilyac._BOTTOM_F_D:
             im.factor_pile.pop()
 
 

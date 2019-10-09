@@ -4,6 +4,7 @@ import controles.lye;
 class miclase
 begin
 def A,B, ready, res as integer;
+def A as float;
  
 write("Hola Mundo!!");
     enter;
