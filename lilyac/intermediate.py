@@ -26,13 +26,18 @@ class Intermediate:
 
     def step(self, symbol):
         if isinstance(symbol, SemanticAction):
+            # Let the semantic action act upon the intermediate
             return symbol(self)
         elif isinstance(symbol, Token):
+            # Keep the last token for future semantic actions
             self.last_token = symbol
 
     def generate_quadruple(self,
                            operator: str = '', op1: Token = None,
                            op2: Token = None, result: Token = None):
+        ''' Quadruples' elements are stored internally as tokens
+            in order to have more information for semantic analysis
+        '''
         quadruple = [operator, op1, op2, result]
         result = self.check_quadruple(quadruple)
         self.counter += 1
@@ -41,37 +46,60 @@ class Intermediate:
             return result
 
     def check_quadruple(self, quadruple: List):
+        ''' Semantic analysis
+
+            Determine if the operation described by the quadruple is valid
+            according to the semantics of the language
+
+            Note:
+                See Type class and it's methods
+        '''
         operator, op1, op2, result = quadruple
         type_r = Type.Error
-        print(quadruple)
         if operator == '=':
+            # Both types must coincide
             type_1 = self.get_type(op1)
             type_2 = self.get_type(result)
+            if isinstance(type_1, Error):
+                return type_1
+            if isinstance(type_2, Error):
+                return type_2
             if type_1.value == type_2.value:
                 return
-        elif operator in nonary_operators:
-            operation = nonary_operators[operator]
+        elif operator in nullary_operators:
+            operation = nullary_operators[operator]
             type_r = operation()
         elif operator in special_operators:
             type_1 = self.get_type(result)
+            if isinstance(type_1, Error):
+                return type_1
             operation = special_operators[operator]
             type_r = operation(type_1)
         elif operator in unary_operators:
             type_1 = self.get_type(op1)
+            if isinstance(type_1, Error):
+                return type_1
             operation = unary_operators[operator]
             type_r = operation(type_1)
         elif operator in binary_operators:
             type_1 = self.get_type(op1)
             type_2 = self.get_type(op2)
+            if isinstance(type_1, Error):
+                return type_1
+            if isinstance(type_2, Error):
+                return type_2
             operation = binary_operators[operator]
             type_r = operation(type_1, type_2)
-        print(quadruple)
         if type_r.value == Type.Error.value:
             return Error(lilyac.ERRORTYPEOP, expected=operator, found=type_r)
         elif result:
+            # Save the type of the result for further analysis
             self.symbols_table[result.lexeme] = type_r
 
     def get_type(self, op: Token):
+        ''' Recover type from symbols table if available
+            Otherwise, determine type by token's grammeme
+        '''
         if op.grammeme == lilyac.IDENTIFIER:
             if op.lexeme in self.symbols_table:
                 return self.symbols_table[op.lexeme]
@@ -91,6 +119,11 @@ class Intermediate:
             return Type.Error
 
     def new_temporal(self):
+        ''' Create a new identifier for a new temporal register
+            Return a Token of an identifier
+            Save identifier in symbols table
+
+        '''
         self.temporal_counter += 1
         lexeme = f'R{self.temporal_counter}'
         temporal = Token(lilyac.IDENTIFIER, lexeme)
@@ -98,22 +131,37 @@ class Intermediate:
         return temporal
 
 
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
 special_operators = {
     'write': Type.write,
     'read': Type.read,
 }
 
-nonary_operators = {
+
+''' Operators whose quadruple are of the form:
+    [operator, None, None, result]
+'''
+nullary_operators = {
     'JI': Type.JI,
+    'enter': Type.enter,
 }
 
 
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
 unary_operators = {
     r'!': lambda x: not x,
     'JF': Type.JF,
     'JT': Type.JT,
 }
 
+
+''' Operators whose quadruple are of the form:
+    [operator, op1, op2, result]
+'''
 binary_operators = {
     r'+': lambda x, y: x + y,
     r'-': lambda x, y: x - y,

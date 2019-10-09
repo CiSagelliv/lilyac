@@ -3,11 +3,22 @@ from enum import Enum, auto
 
 
 class Symbol:
+    ''' Instances of this class represent terminal and
+        non-terminal symbols of the grammar of the language
+
+        Subclasses:
+            - Token
+            - Error
+            - SemanticAction
+    '''
 
     grammeme: str = ...
     terminal: bool = ...
 
     def __init__(self, grammeme: int):
+        ''' By default, a symbol is assumed to be non-terminal
+            and thus only requires a grammeme to be identified
+        '''
         self.grammeme = grammeme
         self.terminal = False
 
@@ -86,6 +97,8 @@ class Symbol:
 
 
 class Token(Symbol):
+    ''' Terminal symbol with defined grammeme and lexeme
+    '''
 
     lexeme: str = ...
 
@@ -95,6 +108,8 @@ class Token(Symbol):
         self.terminal = True
 
     def __eq__(self, other):
+        ''' For analysis, only the grammeme matters in defining equality
+        '''
         return self.grammeme == other.grammeme
 
     def __repr__(self):
@@ -154,73 +169,73 @@ class Token(Symbol):
                 grammeme = 'Reserved word: enter'
             elif self.lexeme == 'principal':
                 grammeme = 'Reserved word: principal'
-        if self.grammeme == lilyac.IDENTIFIER:
+        elif self.grammeme == lilyac.IDENTIFIER:
             grammeme = 'Identifier'
-        if self.grammeme == lilyac.LIBRARY:
+        elif self.grammeme == lilyac.LIBRARY:
             grammeme = 'Library identifier'
-        if self.grammeme == lilyac.COMMENTARY:
+        elif self.grammeme == lilyac.COMMENTARY:
             grammeme = 'Commentary'
-        if self.grammeme == lilyac.INTEGER:
+        elif self.grammeme == lilyac.INTEGER:
             grammeme = 'Integer value'
-        if self.grammeme == lilyac.FLOAT:
+        elif self.grammeme == lilyac.FLOAT:
             grammeme = 'Floating point value'
-        if self.grammeme == lilyac.FLOATSCI:
+        elif self.grammeme == lilyac.FLOATSCI:
             grammeme = 'Floating point value, scientific notation'
-        if self.grammeme == lilyac.CHARACTER:
+        elif self.grammeme == lilyac.CHARACTER:
             grammeme = 'Character'
-        if self.grammeme == lilyac.STRING:
+        elif self.grammeme == lilyac.STRING:
             grammeme = 'String'
-        if self.grammeme == lilyac.TIMES_SIGN:
+        elif self.grammeme == lilyac.TIMES_SIGN:
             grammeme = 'Multiplication arithmetic operator'
-        if self.grammeme == lilyac.OVER_SIGN:
+        elif self.grammeme == lilyac.OVER_SIGN:
             grammeme = 'Division arithmetic operator'
-        if self.grammeme == lilyac.PLUS_SIGN:
+        elif self.grammeme == lilyac.PLUS_SIGN:
             grammeme = 'Addition arithmetic operator'
-        if self.grammeme == lilyac.MINUS_SIGN:
+        elif self.grammeme == lilyac.MINUS_SIGN:
             grammeme = 'Substraction arithmetic operator'
-        if self.grammeme == lilyac.MODULO:
+        elif self.grammeme == lilyac.MODULO:
             grammeme = 'Modulo sign'
-        if self.grammeme == lilyac.OR:
+        elif self.grammeme == lilyac.OR:
             grammeme = 'OR logical operator'
-        if self.grammeme == lilyac.AND:
+        elif self.grammeme == lilyac.AND:
             grammeme = 'AND logical operator'
-        if self.grammeme == lilyac.NOT:
+        elif self.grammeme == lilyac.NOT:
             grammeme = 'NOT logical operator'
-        if self.grammeme == lilyac.LESSTHAN:
+        elif self.grammeme == lilyac.LESSTHAN:
             grammeme = 'Less than relational operator'
-        if self.grammeme == lilyac.LESSEQUALS:
+        elif self.grammeme == lilyac.LESSEQUALS:
             grammeme = 'Less than or equal relational operator'
-        if self.grammeme == lilyac.GREATERTHAN:
+        elif self.grammeme == lilyac.GREATERTHAN:
             grammeme = 'Greater than relational operator'
-        if self.grammeme == lilyac.GREATEREQUALS:
+        elif self.grammeme == lilyac.GREATEREQUALS:
             grammeme = 'Greater than or equal relational operator'
-        if self.grammeme == lilyac.EQUALS:
+        elif self.grammeme == lilyac.EQUALS:
             grammeme = 'Equals relational operator'
-        if self.grammeme == lilyac.NEQUALS:
+        elif self.grammeme == lilyac.NEQUALS:
             grammeme = 'Not equals relational operator'
-        if self.grammeme == lilyac.EQUAL_SIGN:
+        elif self.grammeme == lilyac.EQUAL_SIGN:
             grammeme = 'Equals sign'
-        if self.grammeme == lilyac.POINT:
+        elif self.grammeme == lilyac.POINT:
             grammeme = 'Point'
-        if self.grammeme == lilyac.COMMA:
+        elif self.grammeme == lilyac.COMMA:
             grammeme = 'Comma'
-        if self.grammeme == lilyac.COLON:
+        elif self.grammeme == lilyac.COLON:
             grammeme = 'Colon'
-        if self.grammeme == lilyac.SEMICOLON:
+        elif self.grammeme == lilyac.SEMICOLON:
             grammeme = 'Semicolon'
-        if self.grammeme == lilyac.PARENTHESISOPEN:
+        elif self.grammeme == lilyac.PARENTHESISOPEN:
             grammeme = 'Left parenthesis'
-        if self.grammeme == lilyac.PARENTHESISCLOSE:
+        elif self.grammeme == lilyac.PARENTHESISCLOSE:
             grammeme = 'Right parenthesis'
-        if self.grammeme == lilyac.BRACKETSOPEN:
+        elif self.grammeme == lilyac.BRACKETSOPEN:
             grammeme = 'Left bracket'
-        if self.grammeme == lilyac.BRACKETSCLOSE:
+        elif self.grammeme == lilyac.BRACKETSCLOSE:
             grammeme = 'Right bracket'
-        if self.grammeme == lilyac.SQUAREBOPEN:
+        elif self.grammeme == lilyac.SQUAREBOPEN:
             grammeme = 'Left square bracket'
-        if self.grammeme == lilyac.SQUAREBCLOSE:
+        elif self.grammeme == lilyac.SQUAREBCLOSE:
             grammeme = 'Right square bracket'
-        if self.grammeme == lilyac.END_OF_FILE:
+        elif self.grammeme == lilyac.END_OF_FILE:
             grammeme = 'End of file'
         if self.lexeme:
             return f'<{grammeme}, {self.lexeme}>'
@@ -232,6 +247,13 @@ class Token(Symbol):
 
 
 class Error(Symbol):
+    ''' Type of symbol describing an Error
+
+        It may represent errors of:
+        - Lexicon
+        - Syntax
+        - Semantics
+    '''
 
     def __init__(self, grammeme: int, **kwargs):
         super().__init__(grammeme)
@@ -338,6 +360,12 @@ class Error(Symbol):
 
 
 class SemanticAction(Symbol):
+    ''' Instances of this class represent semantic actions that accomplish
+        the translation of source code into intermediate representation
+
+        A semantic action is considered a type of Symbol as
+        it is part of the syntax diagrams of the language
+    '''
 
     def __init__(self, grammeme: int):
         super().__init__(grammeme)
@@ -349,6 +377,10 @@ class SemanticAction(Symbol):
         return self.__repr__()
 
     def __call__(self, im):
+        ''' Each semantic action acts upon the data structures of the
+            intermediate representation module of the compiler;
+            according to its definition
+        '''
         if self.grammeme == lilyac._ID:
             im.factor_pile.append(im.last_token)
         elif self.grammeme == lilyac._TYPE:
@@ -493,6 +525,12 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._GO_TO:
             operator = 'JI'
+            im.jump_pile.append(im.counter)
+            return im.generate_quadruple(
+                operator=operator,
+            )
+        elif self.grammeme == lilyac._GO_TO_BACK:
+            operator = 'JI'
             result = Token(lilyac.INTEGER, im.jump_pile[-1] + 1)
             return im.generate_quadruple(
                 operator=operator,
@@ -550,7 +588,7 @@ class SemanticAction(Symbol):
 
 
 class Type(Enum):
-    ''' Data types
+    ''' Data types defined in the language and its intermediate representation
     '''
     integer = 1
     float = 2
@@ -566,6 +604,7 @@ class Type(Enum):
     def __str__(self):
         return self.__repr__()
 
+    ''' Semantics of operations '''
     def __add__(self, other):
         if self.value == Type.integer.value:
             if other.value == Type.integer.value:
@@ -763,4 +802,8 @@ class Type(Enum):
 
     @staticmethod
     def JI():
+        return Type.Jump
+
+    @staticmethod
+    def enter():
         return Type.Jump

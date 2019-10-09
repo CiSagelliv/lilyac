@@ -80,23 +80,31 @@ Statement:
 
     .GO_TO #1020
         Generate inconditional jump
+        Push instruction counter to jump_pile
 
-    .FILL_JUMP #1021
+    .GO_TO_BACK #1021
+        Generate inconditional jump backwards with top of jump_pile
+
+    .FILL_JUMP #1022
         Pop jump_pile
-        Fill pending jump (go to) wiht following instruction direction
+        Fill pending jump (go to) with current instruction direction
 
-    .BOTTOM_F #1025
+    .FILL_JUMP_1 #1023
+        Pop jump_pile
+        Fill pending jump (go to) with following instruction direction
+
+    .BOTTOM_F #1024
         Add false bottom to factor_pile
 
-    .BOTTOM_F_D #1026
+    .BOTTOM_F_D #1025
         Remove false bottom from factor_pile
 
 Extra:
-    .READWRITE #1022
+    .READWRITE #1026
         if top of operator_pile is read or write
             Evaluate read or write
 
-    .READWRITE_O #1023
+    .READWRITE_O #1027
         if top of operator_pile is read or write
             Remove operator
 
@@ -110,4 +118,4 @@ Extra:
         push it to factor_pile
         push > to operator_pile
 
-    .ENTER #1024
+    .ENTER #1030
