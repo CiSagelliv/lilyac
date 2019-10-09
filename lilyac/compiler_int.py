@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
 import os
 from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error
+from time import sleep
 
 
 class compiler(QDialog):
@@ -231,6 +232,21 @@ class compiler(QDialog):
          self.jump_pile_str =[str(jump) for jump in self.intermediate.jump_pile]
          self.types =[ f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
 
+    def view_types_quadruples(self):
+        self.list_type.clear()
+        self.list_type.addItems(self.types)
+        self.list_quad.clear()
+        self.list_quad.addItems(self.quadruples_str)
+
+
+    def view_piles(self):
+         self.list_factor.clear()
+         self.list_factor.addItems(self.factor_pile_str)
+         self.list_operator.clear()
+         self.list_operator.addItems(self.operator_pile_str)
+         self.list_jump.clear()
+         self.list_jump.addItems(self.jump_pile_str)
+
     def go_to_analyze(self):
         lexer = Lexer()
         self.parser = Parser()
@@ -241,16 +257,8 @@ class compiler(QDialog):
                 action = self.parser.symbols.pop()
                 result = self.intermediate.step(action)
                 self.update_strings()
-                self.list_type.clear()
-                self.list_type.addItems(self.types)
-                self.list_factor.clear()
-                self.list_factor.addItems(self.factor_pile_str)
-                self.list_operator.clear()
-                self.list_operator.addItems(self.operator_pile_str)
-                self.list_quad.clear()
-                self.list_quad.addItems(self.quadruples_str)
-                self.list_jump.clear()
-                self.list_jump.addItems(self.jump_pile_str)
+                self.view_types_quadruples()
+                self.view_piles()
                 if isinstance(result, Error):
                     self.txt_error.appendPlainText(str(result))
                     print(result)
@@ -277,16 +285,8 @@ class compiler(QDialog):
                         break
                     result = self.intermediate.step(new_token)
                     self.update_strings()
-                    self.list_quad.clear()
-                    self.list_quad.addItems(self.quadruples_str)
-                    self.list_type.clear()
-                    self.list_type.addItems(self.types)
-                    self.list_factor.clear()
-                    self.list_factor.addItems(self.factor_pile_str)
-                    self.list_operator.clear()
-                    self.list_operator.addItems(self.operator_pile_str)
-                    self.list_jump.clear()
-                    self.list_jump.addItems(self.jump_pile_str)
+                    self.view_types_quadruples()
+                    self.view_piles()
                     if isinstance(result, Error):
                         error = True
                         self.txt_error.appendPlainText(str(result))
@@ -294,16 +294,8 @@ class compiler(QDialog):
                         return
                 result = self.intermediate.step(token)
                 self.update_strings()
-                self.list_quad.clear()
-                self.list_quad.addItems(self.quadruples_str)
-                self.list_type.clear()
-                self.list_type.addItems(self.types)
-                self.list_factor.clear()
-                self.list_factor.addItems(self.factor_pile_str)
-                self.list_operator.clear()
-                self.list_operator.addItems(self.operator_pile_str)
-                self.list_jump.clear()
-                self.list_jump.addItems(self.jump_pile_str)
+                self.view_types_quadruples()
+                self.view_piles()
                 if isinstance(result, Error):
                     error = True
                     self.txt_error.appendPlainText(str(result))
@@ -311,7 +303,59 @@ class compiler(QDialog):
                     return
 
     def go_to_despacito(self):
-        pass
+        lexer = Lexer()
+        self.parser = Parser()
+        self.intermediate = Intermediate()
+        i = 0
+        while i < len(self.data) and len(self.parser.symbols) > 0:
+            if self.parser.is_semantic_action():
+                action = self.parser.symbols.pop()
+                result = self.intermediate.step(action)
+                self.update_strings()
+                self.view_types_quadruples()
+                self.view_piles()
+                if isinstance(result, Error):
+                    self.txt_error.appendPlainText(str(result))
+                    print(result)
+                    return
+            else:
+                token, i = lexer.generate_token(i, self.data)
+                if isinstance(token, Error):
+                    error = True
+                    self.txt_error.appendPlainText(token)
+                    self.txt_error.appendPlainText(str(token))
+                    print(token)
+                    return
+                while True:
+                    new_token = self.parser.step(token)
+                    production_pile_str = [str(token) for token in self.parser.symbols]
+                    self.list_production.clear()
+                    self.list_production.addItems(production_pile_str)
+                    if isinstance(new_token, Error):
+                        error = True
+                        self.txt_error.appendPlainText(str(new_token))
+                        print(new_token)
+                        return
+                    elif isinstance(new_token, Token):
+                        break
+                    result = self.intermediate.step(new_token)
+                    self.update_strings()
+                    self.view_types_quadruples()
+                    self.view_piles()
+                    if isinstance(result, Error):
+                        error = True
+                        self.txt_error.appendPlainText(str(result))
+                        print(result)
+                        return
+                result = self.intermediate.step(token)
+                self.update_strings()
+                self.view_types_quadruples()
+                self.view_piles()
+                if isinstance(result, Error):
+                    error = True
+                    self.txt_error.appendPlainText(str(result))
+                    print(result)
+                    return
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
