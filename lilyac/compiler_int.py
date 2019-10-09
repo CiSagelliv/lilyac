@@ -153,7 +153,8 @@ class compiler(QDialog):
 
         lb_error = QLabel("Error")
         lb_error.setObjectName('lb_error')
-        self.list_error = QListWidget()
+        self.txt_error = QPlainTextEdit()
+        self.txt_error.setReadOnly(True)
 
         quad_layout = QVBoxLayout()
         quad_layout.addWidget(lb_quadruples)
@@ -161,7 +162,7 @@ class compiler(QDialog):
         quad_layout.addWidget(lb_type)
         quad_layout.addWidget(self.list_type)
         quad_layout.addWidget(lb_error)
-        quad_layout.addWidget(self.list_error)
+        quad_layout.addWidget(self.txt_error)
 
         return quad_layout
 
@@ -225,66 +226,99 @@ class compiler(QDialog):
     def go_to_analyze(self):
         lexer = Lexer()
         parser = Parser()
+
         intermediate = Intermediate()
         factor_pile_str = [str(factor) for factor in intermediate.factor_pile]
         production_pile_str = [str(token) for token in parser.symbols]
         operator_pile_str = [str(token) for token in intermediate.operator_pile]
         quadruples_str = [str(quadruples) for quadruples in intermediate.quadruples]
-        jump_pile_str = [str(jump) for jump in intermediate.jump_pile ]
+        jump_pile_str = [str(jump) for jump in intermediate.jump_pile]
+        types = [ f'{symbol}:{intermediate.symbols_table[symbol]}' for symbol in intermediate.symbols_table]
+
         i = 0
         while i < len(self.data) and len(parser.symbols) > 0:
             if parser.is_semantic_action():
                 action = parser.symbols.pop()
                 result = intermediate.step(action)
-                self.list_production.addItems(production_pile_str)
-                self.list_type.addItems(intermediate.symbols_table)
+                factor_pile_str = [str(factor) for factor in intermediate.factor_pile]
+                operator_pile_str = [str(token) for token in intermediate.operator_pile]
+                quadruples_str = [str(quadruples) for quadruples in intermediate.quadruples]
+                jump_pile_str = [str(jump) for jump in intermediate.jump_pile ]
+                types = [ f'{symbol}:{intermediate.symbols_table[symbol]}' for symbol in intermediate.symbols_table]
+                self.list_type.clear()
+                self.list_type.addItems(types)
+                self.list_factor.clear()
                 self.list_factor.addItems(factor_pile_str)
+                self.list_operator.clear()
                 self.list_operator.addItems(operator_pile_str)
+                self.list_quad.clear()
                 self.list_quad.addItems(quadruples_str)
+                self.list_jump.clear()
                 self.list_jump.addItems(jump_pile_str)
                 if isinstance(result, Error):
+                    self.txt_error.appendPlainText(str(result))
                     print(result)
                     return
             else:
                 token, i = lexer.generate_token(i, self.data)
                 if isinstance(token, Error):
                     error = True
+                    self.txt_error.appendPlainText(token)
+                    self.txt_error.appendPlainText(str(token))
                     print(token)
                     return
                 while True:
                     new_token = parser.step(token)
-                    self.list_quad.addItems(quadruples_str)
-                    self.list_type.addItems(intermediate.symbols_table)
-                    self.list_factor.addItems(factor_pile_str)
-                    self.list_operator.addItems(operator_pile_str)
+                    production_pile_str = [str(token) for token in parser.symbols]
+                    self.list_production.clear()
                     self.list_production.addItems(production_pile_str)
-                    self.list_jump.addItems(jump_pile_str)
                     if isinstance(new_token, Error):
                         error = True
+                        self.txt_error.appendPlainText(str(new_token))
                         print(new_token)
                         return
                     elif isinstance(new_token, Token):
                         break
                     result = intermediate.step(new_token)
+                    factor_pile_str = [str(factor) for factor in intermediate.factor_pile]
+                    operator_pile_str = [str(token) for token in intermediate.operator_pile]
+                    quadruples_str = [str(quadruples) for quadruples in intermediate.quadruples]
+                    jump_pile_str = [str(jump) for jump in intermediate.jump_pile ]
+                    types = [ f'{symbol}:{intermediate.symbols_table[symbol]}' for symbol in intermediate.symbols_table]
+                    self.list_quad.clear()
                     self.list_quad.addItems(quadruples_str)
-                    self.list_type.addItems(intermediate.symbols_table)
+                    self.list_type.clear()
+                    self.list_type.addItems(types)
+                    self.list_factor.clear()
                     self.list_factor.addItems(factor_pile_str)
+                    self.list_operator.clear()
                     self.list_operator.addItems(operator_pile_str)
-                    self.list_production.addItems(production_pile_str)
+                    self.list_jump.clear()
                     self.list_jump.addItems(jump_pile_str)
                     if isinstance(result, Error):
                         error = True
+                        self.txt_error.appendPlainText(str(result))
                         print(result)
                         return
                 result = intermediate.step(token)
+                factor_pile_str = [str(factor) for factor in intermediate.factor_pile]
+                operator_pile_str = [str(token) for token in intermediate.operator_pile]
+                quadruples_str = [str(quadruples) for quadruples in intermediate.quadruples]
+                jump_pile_str = [str(jump) for jump in intermediate.jump_pile ]
+                types = [ f'{symbol}:{intermediate.symbols_table[symbol]}' for symbol in intermediate.symbols_table]
+                self.list_quad.clear()
                 self.list_quad.addItems(quadruples_str)
-                self.list_type.addItems(intermediate.symbols_table)
+                self.list_type.clear()
+                self.list_type.addItems(types)
+                self.list_factor.clear()
                 self.list_factor.addItems(factor_pile_str)
+                self.list_operator.clear()
                 self.list_operator.addItems(operator_pile_str)
-                self.list_production.addItems(production_pile_str)
+                self.list_jump.clear()
                 self.list_jump.addItems(jump_pile_str)
                 if isinstance(result, Error):
                     error = True
+                    self.txt_error.appendPlainText(str(result))
                     print(result)
                     return
 
