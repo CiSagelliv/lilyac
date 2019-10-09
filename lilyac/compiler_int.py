@@ -236,11 +236,11 @@ class compiler(QDialog):
             if parser.is_semantic_action():
                 action = parser.symbols.pop()
                 result = intermediate.step(action)
-                self.list_quad.addItems(quadruples_str)
+                self.list_production.addItems(production_pile_str)
                 self.list_type.addItems(intermediate.symbols_table)
                 self.list_factor.addItems(factor_pile_str)
                 self.list_operator.addItems(operator_pile_str)
-                self.list_production.addItems(production_pile_str)
+                self.list_quad.addItems(quadruples_str)
                 self.list_jump.addItems(jump_pile_str)
                 if isinstance(result, Error):
                     print(result)
@@ -253,6 +253,12 @@ class compiler(QDialog):
                     return
                 while True:
                     new_token = parser.step(token)
+                    self.list_quad.addItems(quadruples_str)
+                    self.list_type.addItems(intermediate.symbols_table)
+                    self.list_factor.addItems(factor_pile_str)
+                    self.list_operator.addItems(operator_pile_str)
+                    self.list_production.addItems(production_pile_str)
+                    self.list_jump.addItems(jump_pile_str)
                     if isinstance(new_token, Error):
                         error = True
                         print(new_token)
@@ -260,11 +266,23 @@ class compiler(QDialog):
                     elif isinstance(new_token, Token):
                         break
                     result = intermediate.step(new_token)
+                    self.list_quad.addItems(quadruples_str)
+                    self.list_type.addItems(intermediate.symbols_table)
+                    self.list_factor.addItems(factor_pile_str)
+                    self.list_operator.addItems(operator_pile_str)
+                    self.list_production.addItems(production_pile_str)
+                    self.list_jump.addItems(jump_pile_str)
                     if isinstance(result, Error):
                         error = True
                         print(result)
                         return
                 result = intermediate.step(token)
+                self.list_quad.addItems(quadruples_str)
+                self.list_type.addItems(intermediate.symbols_table)
+                self.list_factor.addItems(factor_pile_str)
+                self.list_operator.addItems(operator_pile_str)
+                self.list_production.addItems(production_pile_str)
+                self.list_jump.addItems(jump_pile_str)
                 if isinstance(result, Error):
                     error = True
                     print(result)
