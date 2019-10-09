@@ -60,6 +60,10 @@ class Intermediate:
             # Both types must coincide
             type_1 = self.get_type(op1)
             type_2 = self.get_type(result)
+            if isinstance(type_1, Error):
+                return type_1
+            if isinstance(type_2, Error):
+                return type_2
             if type_1.value == type_2.value:
                 return
         elif operator in nullary_operators:
@@ -67,15 +71,23 @@ class Intermediate:
             type_r = operation()
         elif operator in special_operators:
             type_1 = self.get_type(result)
+            if isinstance(type_1, Error):
+                return type_1
             operation = special_operators[operator]
             type_r = operation(type_1)
         elif operator in unary_operators:
             type_1 = self.get_type(op1)
+            if isinstance(type_1, Error):
+                return type_1
             operation = unary_operators[operator]
             type_r = operation(type_1)
         elif operator in binary_operators:
             type_1 = self.get_type(op1)
             type_2 = self.get_type(op2)
+            if isinstance(type_1, Error):
+                return type_1
+            if isinstance(type_2, Error):
+                return type_2
             operation = binary_operators[operator]
             type_r = operation(type_1, type_2)
         if type_r.value == Type.Error.value:
@@ -119,36 +131,38 @@ class Intermediate:
         return temporal
 
 
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
 special_operators = {
-    ''' Operators whose quadruple are of the form:
-            [operator, op1, None, result]
-    '''
     'write': Type.write,
     'read': Type.read,
 }
 
 
+''' Operators whose quadruple are of the form:
+    [operator, None, None, result]
+'''
 nullary_operators = {
-    ''' Operators whose quadruple are of the form:
-            [operator, None, None, result]
-    '''
     'JI': Type.JI,
+    'enter': Type.enter,
 }
 
 
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
 unary_operators = {
-    ''' Operators whose quadruple are of the form:
-            [operator, op1, None, result]
-    '''
     r'!': lambda x: not x,
     'JF': Type.JF,
     'JT': Type.JT,
 }
 
+
+''' Operators whose quadruple are of the form:
+    [operator, op1, op2, result]
+'''
 binary_operators = {
-    ''' Operators whose quadruple are of the form:
-            [operator, op1, op2, result]
-    '''
     r'+': lambda x, y: x + y,
     r'-': lambda x, y: x - y,
     r'*': lambda x, y: x * y,

@@ -525,6 +525,12 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._GO_TO:
             operator = 'JI'
+            im.jump_pile.append(im.counter)
+            return im.generate_quadruple(
+                operator=operator,
+            )
+        elif self.grammeme == lilyac._GO_TO_BACK:
+            operator = 'JI'
             result = Token(lilyac.INTEGER, im.jump_pile[-1] + 1)
             return im.generate_quadruple(
                 operator=operator,
@@ -796,4 +802,8 @@ class Type(Enum):
 
     @staticmethod
     def JI():
+        return Type.Jump
+
+    @staticmethod
+    def enter():
         return Type.Jump

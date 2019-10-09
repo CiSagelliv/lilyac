@@ -278,6 +278,52 @@ predictions: List[List[int]] = [
 ]
 
 
+''' Semantics '''
+''' Semantic actions
+
+    Code values: 1001 - 1099
+'''
+_ID: int = 1001
+_TYPE: int = 1002
+_FACTOR_ID: int = 1003
+_FACTOR_INT: int = 1004
+_FACTOR_REAL: int = 1005
+_FACTOR_CHAR: int = 1006
+_FACTOR_STR: int = 1007
+_OPERATOR: int = 1008
+_OR: int = 1009
+_AND: int = 1010
+_NOT: int = 1011
+_RELATIONAL: int = 1012
+_ADDITION: int = 1013
+_MULTIPLICATION: int = 1014
+_ASSIGNMENT: int = 1015
+_BOTTOM: int = 1016
+_BOTTOM_D: int = 1017
+_GO_TO_TRUE: int = 1018
+_GO_TO_FALSE: int = 1019
+_GO_TO: int = 1020
+_GO_TO_BACK: int = 1021
+_FILL_JUMP: int = 1022
+_FILL_JUMP_1: int = 1023
+_BOTTOM_F: int = 1024
+_BOTTOM_F_D: int = 1025
+_READWRITE: int = 1026
+_READWRITE_O: int = 1027
+_INCREMENT: int = 1028
+_FOR_COMPARISON: int = 1029
+_ENTER: int = 1030
+
+
+''' Semantic Errors
+
+    Code values: 701 - 799
+'''
+ERRORTYPEOP: int = 701
+ERRORUNDECL: int = 702
+ERRORUNKNOWNS: int = 799
+
+
 ''' Productions
 
     Productions R of the context-free grammar of the language
@@ -526,7 +572,7 @@ derivations: Dict = {
         SemanticAction(_GO_TO_TRUE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
-        SemanticAction(_GO_TO),
+        SemanticAction(_GO_TO_BACK),
         SemanticAction(_FILL_JUMP),
     ],
     61: [
@@ -542,7 +588,7 @@ derivations: Dict = {
         Symbol(STATEMENTS),
         SemanticAction(_INCREMENT),
         Token(RESERVED, 'endfor'),
-        SemanticAction(_GO_TO),
+        SemanticAction(_GO_TO_BACK),
         SemanticAction(_FILL_JUMP),
     ],
     62: [
@@ -575,48 +621,3 @@ derivations: Dict = {
         SemanticAction(_ENTER),
     ],
 }
-
-
-''' Semantics '''
-''' Semantic actions
-
-    Code values: 1001 - 1099
-'''
-_ID: int = 1001
-_TYPE: int = 1002
-_FACTOR_ID: int = 1003
-_FACTOR_INT: int = 1004
-_FACTOR_REAL: int = 1005
-_FACTOR_CHAR: int = 1006
-_FACTOR_STR: int = 1007
-_OPERATOR: int = 1008
-_OR: int = 1009
-_AND: int = 1010
-_NOT: int = 1011
-_RELATIONAL: int = 1012
-_ADDITION: int = 1013
-_MULTIPLICATION: int = 1014
-_ASSIGNMENT: int = 1015
-_BOTTOM: int = 1016
-_BOTTOM_D: int = 1017
-_GO_TO_TRUE: int = 1018
-_GO_TO_FALSE: int = 1019
-_GO_TO: int = 1020
-_FILL_JUMP: int = 1021
-_FILL_JUMP_1: int = 1022
-_READWRITE: int = 1023
-_READWRITE_O: int = 1024
-_ENTER: int = 1025
-_BOTTOM_F: int = 1026
-_BOTTOM_F_D: int = 1027
-_FOR_COMPARISON: int = 1028
-_INCREMENT: int = 1029
-
-
-''' Semantic Errors
-
-    Code values: 701 - 799
-'''
-ERRORTYPEOP: int = 701
-ERRORUNDECL: int = 702
-ERRORUNKNOWNS: int = 799
