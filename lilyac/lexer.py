@@ -1,4 +1,3 @@
-from typing import List
 import lilyac
 from lilyac import Token, Error
 
@@ -43,6 +42,9 @@ class Lexer:
         return self.state >= 100
 
     def is_final(self):
+        ''' Check if the finishing state corresponds to a Token
+            whose last character determines its end
+        '''
         return (self.state == lilyac.LIBRARY
                 or self.state == lilyac.COMMENTARY
                 or self.state == lilyac.CHARACTER
@@ -62,6 +64,9 @@ class Lexer:
 
     @staticmethod
     def hash_symbol(symbol: str):
+        ''' Hash symbols from the input alphabet to
+            the corresponding column index of the transition matrix
+        '''
         if symbol == 'E':
             return 0
         elif symbol == 'e':
