@@ -17,21 +17,90 @@ class compiler(QDialog):
         self.layout().addLayout(self.factor_pile())
         self.layout().addLayout(self.production_pile())
 
+        self.stylesheet= """
+        QDialog{
+            background-color: #D1EECC
+        }
+
+        QPushButton#open_file{
+            background-color: #57A99A
+        }
+
+        QPushButton#edit_txt{
+            background-color: #57A99A
+        }
+
+        QPushButton#save_file{
+            background-color: #57A99A
+        }
+
+        QPushButton#analyze_code{
+            background-color: #57A99A
+        }
+
+        QLabel#lb_code{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#lb_quadruples{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#lb_error{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#lb_factor{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#lb_operator{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#production_pile{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+
+        QLabel#jump_pile{
+            font-family: "Times New Roman", Times, serif;
+            font-size: 20px;
+            color: green;
+        }
+        """
+
         self.setGeometry(0, 30, 1500, 700)
         self.setWindowTitle('lilyac')
+        self.setStyleSheet(self.stylesheet)
         self.show()
 
     def head(self):
         btn_open_file = QPushButton('Open file', self)
+        btn_open_file.setObjectName('open_file')
         btn_open_file.clicked.connect(self.go_to_open)
 
         btn_edit_text = QPushButton('Edit text', self)
+        btn_edit_text.setObjectName('edit_txt')
         btn_edit_text.clicked.connect(self.go_to_edit)
 
         btn_save_changes = QPushButton('Save', self)
+        btn_save_changes.setObjectName('save_file')
         btn_save_changes.clicked.connect(self.go_to_save)
 
         btn_analyze_code = QPushButton('Analyze', self)
+        btn_analyze_code.setObjectName('analyze_code')
         btn_analyze_code.clicked.connect(self.go_to_analyze)
 
         head_layout = QVBoxLayout()
@@ -44,6 +113,7 @@ class compiler(QDialog):
 
     def code(self):
         lb_code = QLabel("Code")
+        lb_code.setObjectName('lb_code')
         self.txt_code = QPlainTextEdit()
 
         code_layout = QVBoxLayout()
@@ -54,9 +124,11 @@ class compiler(QDialog):
 
     def quadruples(self):
         lb_quadruples = QLabel("Quadruples")
+        lb_quadruples.setObjectName('lb_quadruples')
         txt_quad = QPlainTextEdit()
 
         lb_error = QLabel("Error")
+        lb_error.setObjectName('lb_error')
         txt_error = QPlainTextEdit()
 
         quad_layout = QVBoxLayout()
@@ -69,9 +141,11 @@ class compiler(QDialog):
 
     def factor_pile(self):
         lb_factor = QLabel("factor_pile")
+        lb_factor.setObjectName('lb_factor')
         txt_factor = QPlainTextEdit()
 
         lb_operator = QLabel("operator_pile")
+        lb_operator.setObjectName('lb_operator')
         txt_operator = QPlainTextEdit()
 
         factor_layout = QVBoxLayout()
@@ -84,9 +158,11 @@ class compiler(QDialog):
 
     def production_pile(self):
         lb_production = QLabel("production_pile")
+        lb_production.setObjectName('production_pile')
         txt_production = QPlainTextEdit()
 
         lb_jump = QLabel("jump_pile")
+        lb_jump.setObjectName('jump_pile')
         txt_jump = QPlainTextEdit()
 
         production_layout = QVBoxLayout()
