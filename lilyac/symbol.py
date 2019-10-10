@@ -699,8 +699,7 @@ class Type(Enum):
                 return Type.float
             elif other.value == Type.float.value:
                 return Type.float
-        else:
-            return Type.Error
+        return Type.Error
 
     def __mul__(self, other):
         if self.value == Type.integer.value:

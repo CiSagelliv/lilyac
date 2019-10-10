@@ -263,7 +263,9 @@ class compiler(QDialog):
         self.list_jump.clear()
         self.list_jump.addItems(self.jump_pile_str)
 
+
     def go_to_analyze(self):
+        self.txt_error.clear()
         lexer = Lexer()
         self.parser = Parser()
         self.intermediate = Intermediate()
@@ -319,6 +321,7 @@ class compiler(QDialog):
                     return
 
     def go_to_despacito(self):
+        self.txt_error.clear()
         lexer = Lexer()
         self.parser = Parser()
         self.intermediate = Intermediate()
