@@ -11,7 +11,7 @@ write("Hola Mundo!!");
     if (A > B)
         res = A + B;
     else
-        res = A - B;
+        res = A * B;
     endif;
     write("Resultado = "); 
 end

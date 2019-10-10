@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
 from PyQt5.QtCore import (QTimer, QEventLoop)
 import os
-from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error
+from lilyac import Lexer, Parser, Intermediate, Token, Error
 import time
 
 
@@ -226,12 +226,24 @@ class compiler(QDialog):
                 f.close()
 
     def update_strings(self):
-         self.factor_pile_str =[str(factor) for factor in self.intermediate.factor_pile]
-         self.production_pile_str =[str(token) for token in self.parser.symbols]
-         self.operator_pile_str =[str(token) for token in self.intermediate.operator_pile]
-         self.quadruples_str =[str(quadruples) for quadruples in self.intermediate.quadruples]
-         self.jump_pile_str =[str(jump) for jump in self.intermediate.jump_pile]
-         self.types =[ f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
+        def stringify_quadruple(quadruple, i):
+            operator, op1, op2, result = quadruple
+            op1 = op1.lexeme if op1 else ''
+            op2 = op2.lexeme if op2 else ''
+            if result:
+                if isinstance(result, Token):
+                    result = result.lexeme
+            else:
+                result = ''
+            line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
+            return line
+
+        self.factor_pile_str = [str(factor) for factor in self.intermediate.factor_pile]
+        self.production_pile_str = [str(token) for token in self.parser.symbols]
+        self.operator_pile_str = [str(token) for token in self.intermediate.operator_pile]
+        self.quadruples_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.intermediate.quadruples)]
+        self.jump_pile_str = [str(jump) for jump in self.intermediate.jump_pile]
+        self.types = [f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
 
     def view_types_quadruples(self):
         self.list_type.clear()
@@ -240,12 +252,12 @@ class compiler(QDialog):
         self.list_quad.addItems(self.quadruples_str)
 
     def view_piles(self):
-         self.list_factor.clear()
-         self.list_factor.addItems(self.factor_pile_str)
-         self.list_operator.clear()
-         self.list_operator.addItems(self.operator_pile_str)
-         self.list_jump.clear()
-         self.list_jump.addItems(self.jump_pile_str)
+        self.list_factor.clear()
+        self.list_factor.addItems(self.factor_pile_str)
+        self.list_operator.clear()
+        self.list_operator.addItems(self.operator_pile_str)
+        self.list_jump.clear()
+        self.list_jump.addItems(self.jump_pile_str)
 
     def go_to_analyze(self):
         lexer = Lexer()

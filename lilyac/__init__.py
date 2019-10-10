@@ -556,6 +556,7 @@ derivations: Dict = {
         SemanticAction(_GO_TO_FALSE),
         Symbol(STATEMENTS),
         Symbol(ELSE),
+        SemanticAction(_BOTTOM_D),
         Token(RESERVED, 'endif'),
         SemanticAction(_FILL_JUMP),
     ],

@@ -598,7 +598,7 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._GO_TO_BACK:
             operator = 'JI'
-            result = Token(lilyac.INTEGER, im.jump_pile[-1] + 1)
+            result = Token(lilyac.INTEGER, im.jump_pile[-1] - 1)
             return im.generate_quadruple(
                 operator=operator,
                 result=result
