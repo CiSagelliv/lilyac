@@ -135,12 +135,16 @@ class compiler(QDialog):
         lb_code = QLabel("Code")
         lb_code.setObjectName('lb_code')
         self.txt_code = QPlainTextEdit()
+        self.txt_code.textChanged.connect(self.on_text_changed)
 
         code_layout = QVBoxLayout()
         code_layout.addWidget(lb_code)
         code_layout.addWidget(self.txt_code)
 
         return code_layout
+
+    def on_text_changed(self):
+        self.data = self.txt_code.toPlainText() + ' '
 
     def quadruples(self):
         lb_quadruples = QLabel("Quadruples")

@@ -373,7 +373,7 @@ class SemanticAction(Symbol):
         super().__init__(grammeme)
 
     def __repr__(self):
-        description: ''
+        description = ''
         if self.grammeme == lilyac._ID:
             description = 'Declare variable'
         elif self.grammeme == lilyac._TYPE:
@@ -547,7 +547,9 @@ class SemanticAction(Symbol):
                 )
         elif self.grammeme == lilyac._MULTIPLICATION:
             operator = im.operator_pile[-1]
-            if operator.grammeme == lilyac.OR:
+            if (operator.grammeme == lilyac.TIMES_SIGN
+               or operator.grammeme == lilyac.OVER_SIGN
+               or operator.grammeme == lilyac.MODULO):
                 im.operator_pile.pop()
                 op2 = im.factor_pile.pop()
                 op1 = im.factor_pile.pop()
