@@ -6,9 +6,11 @@ import os
 
 def main():
     if len(sys.argv) > 1:
+        # If a file is given, compile from CLI
         file = sys.argv[1]
         compile(file)
     else:
+        # Open graphical interface
         app = QApplication(sys.argv)
         ex = compiler()
         sys.exit(app.exec())
@@ -19,9 +21,11 @@ def __main__():
 
 
 def compile(file):
+    # Read code
     code: str = ''
     with open(file) as f:
         code = f.read() + ' '
+    # Initialize modules
     lexer = Lexer()
     parser = Parser()
     intermediate = Intermediate()
@@ -42,13 +46,16 @@ def compile(file):
             while True:
                 new_token = parser.step(token)
                 if isinstance(new_token, Error):
+                    # Syntax Error
                     error = True
                     print(new_token)
                     return
                 elif isinstance(new_token, Token):
                     break
+                # Semantic action
                 result = intermediate.step(new_token)
                 if isinstance(result, Error):
+                    # Semantic error
                     error = True
                     print(result)
                     return
