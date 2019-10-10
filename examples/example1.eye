@@ -1,11 +1,10 @@
 import io.lye;
 import controles.lye;
- 
+ 
 class miclase
 begin
 def A,B, ready, res as integer;
-def A as float;
- 
+ 
 write("Hola Mundo!!");
     enter;
     read (A,B);
@@ -14,5 +13,5 @@ write("Hola Mundo!!");
     else
         res = A - B;
     endif;
-    write("Resultado = "); 
+    write("Resultado = "); 
 end
