@@ -405,36 +405,36 @@ class SemanticAction(Symbol):
         elif self.grammeme == lilyac._ASSIGNMENT:
             description = 'Found an equal sign and push it to operator_pile'
         elif self.grammeme == lilyac._BOTTOM:
-            description = ...
+            description = 'Add false botton to operator_file'
         elif self.grammeme == lilyac._BOTTOM_D:
-            description = ...
+            description = 'Remove false bottom from operator_pile'
         elif self.grammeme == lilyac._GO_TO_TRUE:
-            description = ...
+            description = 'Generate jump if top of factor_pile has boolean value TRUE'
         elif self.grammeme == lilyac._GO_TO_FALSE:
-            description = ...
+            description = 'Generate jump if top pf fator_pile has boolean value FALSE'
         elif self.grammeme == lilyac._GO_TO:
-            description = ...
+            description = 'Generate inconditional jump'
         elif self.grammeme == lilyac._GO_TO_BACK:
-            description = ...
+            description = 'Generate inconditional jump backwards with top of jump_pile'
         elif self.grammeme == lilyac._FILL_JUMP:
-            description = ...
+            description = 'Fill pending jump with current instruction-direction'
         elif self.grammeme == lilyac._FILL_JUMP_1:
-            description = ...
+            description = 'Fill pending jump with following instruction-direction'
         elif self.grammeme == lilyac._BOTTOM_F:
-            description = ...
+            description = 'Add false botton to factor_pile'
         elif self.grammeme == lilyac._BOTTOM_F_D:
-            description = ...
+            description = 'Remove false bottom from factor_pile'
         elif self.grammeme == lilyac._READWRITE:
-            description = ...
+            description = 'Evaluate read or write'
         elif self.grammeme == lilyac._READWRITE_O:
-            description = ...
+            description = 'Remove read or write of operator_pile'
         elif self.grammeme == lilyac._INCREMENT:
-            description = ...
+            description = 'Increment factor'
         elif self.grammeme == lilyac._FOR_COMPARISON:
-            description = ...
+            description = 'Do for comparison'
         elif self.grammeme == lilyac._ENTER:
-            description = ...
-            return f'<Semantic Action: {description}>'
+            description = 'Enter'
+        return f'<Semantic Action: {description}>'
 
 
     def __str__(self):

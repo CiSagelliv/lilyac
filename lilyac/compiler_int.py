@@ -267,7 +267,7 @@ class compiler(QDialog):
                 token, i = lexer.generate_token(i, self.data)
                 if isinstance(token, Error):
                     error = True
-                    self.txt_error.appendPlainText(token)
+                    #self.txt_error.appendPlainText(token)
                     self.txt_error.appendPlainText(str(token))
                     print(token)
                     return
