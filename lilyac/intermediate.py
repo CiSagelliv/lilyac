@@ -5,6 +5,11 @@ from lilyac import Token, Error, SemanticAction, Type
 
 
 class Intermediate:
+    ''' Aggregated intermediate representation module and semantic analysis
+
+        In order to avoid traversing the syntax diagrams in multiple occasions
+        the semantic analysis is done upon the quadruples themselves
+    '''
 
     symbols_table: Dict[str, Type] = ...
     quadruples: List[List] = ...
@@ -39,6 +44,7 @@ class Intermediate:
             in order to have more information for semantic analysis
         '''
         quadruple = [operator, op1, op2, result]
+        # Semantic analysis
         result = self.check_quadruple(quadruple)
         self.counter += 1
         self.quadruples.append(quadruple)
@@ -122,7 +128,6 @@ class Intermediate:
         ''' Create a new identifier for a new temporal register
             Return a Token of an identifier
             Save identifier in symbols table
-
         '''
         self.temporal_counter += 1
         lexeme = f'R{self.temporal_counter}'
