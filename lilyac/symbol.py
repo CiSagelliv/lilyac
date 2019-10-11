@@ -685,8 +685,7 @@ class Type(Enum):
                 return Type.float
             elif other.value == Type.float.value:
                 return Type.float
-        else:
-            return Type.Error
+        return Type.Error
 
     def __sub__(self, other):
         if self.value == Type.integer.value:
@@ -699,8 +698,7 @@ class Type(Enum):
                 return Type.float
             elif other.value == Type.float.value:
                 return Type.float
-        else:
-            return Type.Error
+        return Type.Error
 
     def __mul__(self, other):
         if self.value == Type.integer.value:
@@ -713,8 +711,7 @@ class Type(Enum):
                 return Type.float
             elif other.value == Type.float.value:
                 return Type.float
-        else:
-            return Type.Error
+        return Type.Error
 
     def __truediv__(self, other):
         if self.value == Type.integer.value:
@@ -727,26 +724,22 @@ class Type(Enum):
                 return Type.float
             elif other.value == Type.float.value:
                 return Type.float
-        else:
-            return Type.Error
+        return Type.Error
 
     def __mod__(self, other):
         if self.value == Type.integer.value and other.value == Type.integer.value:
             return Type.integer
-        else:
-            return Type.Error
+        return Type.Error
 
     def __and__(self, other):
         if self.value == 5 and other.value == 5:
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __or__(self, other):
         if self.value == 5 and other.value == 5:
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __lt__(self, other):
         if self.value == Type.integer.value:
@@ -761,8 +754,7 @@ class Type(Enum):
                 return Type.boolean
         elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __le__(self, other):
         if self.value == Type.integer.value:
@@ -777,8 +769,7 @@ class Type(Enum):
                 return Type.boolean
         elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __eq__(self, other):
         if self.value == Type.integer.value:
@@ -793,8 +784,7 @@ class Type(Enum):
                 return Type.boolean
         elif self.value == Type.character.value and other.value == Type.character.value:
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __ne__(self, other):
         if self.value == Type.integer.value:
@@ -810,8 +800,7 @@ class Type(Enum):
         elif (self.value == Type.character.value
               and other.value == Type.character.value):
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __gt__(self, other):
         if self.value == Type.integer.value:
@@ -827,8 +816,7 @@ class Type(Enum):
         elif (self.value == Type.character.value
               and other.value == Type.character.value):
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     def __ge__(self, other):
         if self.value == Type.integer.value:
@@ -844,8 +832,7 @@ class Type(Enum):
         elif (self.value == Type.character.value
               and other.value == Type.character.value):
             return Type.boolean
-        else:
-            return Type.Error
+        return Type.Error
 
     @staticmethod
     def write(factor):
@@ -859,15 +846,13 @@ class Type(Enum):
     def JF(factor):
         if factor.value == Type.boolean.value:
             return Type.Jump
-        else:
-            return Type.Error
+        return Type.Error
 
     @staticmethod
     def JT(factor):
         if factor.value == Type.boolean.value:
             return Type.Jump
-        else:
-            return Type.Error
+        return Type.Error
 
     @staticmethod
     def JI():
