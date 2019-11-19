@@ -5,3 +5,13 @@
 build
 
 dist
+
+lilyac/Include
+
+lilyac/Lib
+
+lilyac/Scripts
+
+lilyac/tcl
+
+lilyac/LICENSE.txt

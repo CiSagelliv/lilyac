@@ -2,6 +2,7 @@ from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
+from .optimization import optimize_jumps
 from .compiler_int import compiler
 
 from typing import List, Dict

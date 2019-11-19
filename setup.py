@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='lilyac',
-    version='0.0.20',
+    version='0.0.22',
     description='',
     author=['Heladio Amaya', 'Cinthya Villegas', 'Jose Quiroga'],
     author_email=[
