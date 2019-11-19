@@ -126,8 +126,11 @@ class Intermediate:
 
     def new_temporal(self):
         ''' Create a new identifier for a new temporal register
-            Return a Token of an identifier
-            Save identifier in symbols table
+            Returns a Token of an identifier
+            Saves this identifier in the symbols table
+
+            The lexeme of this temporal variable starts with '.R'
+            since no token's lexeme may start with a dot
         '''
         self.temporal_counter += 1
         lexeme = f'.R{self.temporal_counter}'
