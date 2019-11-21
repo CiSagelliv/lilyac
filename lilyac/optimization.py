@@ -1,4 +1,5 @@
 import lilyac
+from lilyac import Token
 
 from typing import List, Dict
 
@@ -125,8 +126,34 @@ def remove_temporal_use(quadruples: List, i: int):
 
 def evaluate_quadruple(q):
     ''' Evaluate the result of a quadruple with a simple operation
+        returning a token
     '''
-    ...
+    op = q[0]
+    if op in lilyac.unary_operators:
+        assert is_constant(q[1])
+        operator = lilyac.unary_operators[op]
+        op1 = get_value(q[1])
+        result = operator(op1)
+    elif op in lilyac.binary_operators:
+        assert is_constant(q[1]) and is_constant(q[2])
+        operator = lilyac.unary_operators[op]
+        op1 = get_value(q[1])
+        op2 = get_value(q[2])
+        result = operator(op1, op2)
+    else:
+        raise Exception('Error in operation: ', q)
+
+    res_type = type(result)
+    if res_type == int:
+        return Token(str(result), lilyac.INTEGER)
+    elif res_type == float and 'e' in str(result):
+        return Token(str(result), lilyac.FLOATSCI)
+    elif res_type == float:
+        return Token(str(result), lilyac.FLOAT)
+    elif res_type == str and len(str(result)):
+        return Token(result, lilyac.CHARACTER)
+    elif res_type == str:
+        return Token(result, lilyac.STRING)
 
 
 def search_temporal(quadruples, temporal):
@@ -147,3 +174,15 @@ def is_constant(factor):
 
 def can_evaluate(q):
     return q[1] in constants and q[2] in constants
+
+
+def get_value(token):
+    if token.grammeme == lilyac.INTEGER:
+        return int(token.lexeme)
+    elif (token.grammeme == lilyac.FLOAT
+          or token.grammeme == lilyac.FLOATSCI):
+        return float(token.lexeme)
+    elif token.grammeme == lilyac.CHARACTER:
+        return token.lexeme
+    elif token.grammeme == lilyac.STRING:
+        return token.lexeme
