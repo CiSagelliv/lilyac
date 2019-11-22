@@ -41,6 +41,7 @@ def optimize_temporals(quadruples: List):
             # Use of temporal variable
             i = remove_temporal_use(quadruples, i)
         i += 1
+    return quadruples
 
 
 def remove_temporal_assignment(quadruples: List, i: int):
