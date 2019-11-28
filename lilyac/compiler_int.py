@@ -199,21 +199,14 @@ class compiler(QDialog):
             line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
             return line
 
-        #self.factor_pile_str = [str(factor) for factor in self.intermediate.factor_pile]
-        #self.production_pile_str = [str(token) for token in self.parser.symbols]
-        #self.operator_pile_str = [str(token) for token in self.intermediate.operator_pile]
         self.quadruples_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.intermediate.quadruples)]
-        #self.jump_pile_str = [str(jump) for jump in self.intermediate.jump_pile]
         self.types = [f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
 
     def view_types_quadruples(self):
-        #self.list_type.clear()
-        #self.list_type.addItems(self.types)
         self.list_quad.clear()
         self.list_quad.addItems(self.quadruples_str)
 
     def go_to_analyze(self):
-        #self.txt_error.clear()
         lexer = Lexer()
         self.parser = Parser()
         self.intermediate = Intermediate()
@@ -224,7 +217,6 @@ class compiler(QDialog):
                 result = self.intermediate.step(action)
                 self.update_strings()
                 self.view_types_quadruples()
-                #self.view_piles()
                 if isinstance(result, Error):
                     self.txt_error.appendPlainText(str(result))
                     print(result)
@@ -233,18 +225,13 @@ class compiler(QDialog):
                 token, i = lexer.generate_token(i, self.data)
                 if isinstance(token, Error):
                     error = True
-                    #self.txt_error.appendPlainText(token)
-                    #self.txt_error.appendPlainText(str(token))
                     print(token)
                     return
                 while True:
                     new_token = self.parser.step(token)
                     production_pile_str = [str(token) for token in self.parser.symbols]
-                    #self.list_production.clear()
-                    #self.list_production.addItems(production_pile_str)
                     if isinstance(new_token, Error):
                         error = True
-                        #self.txt_error.appendPlainText(str(new_token))
                         print(new_token)
                         return
                     elif isinstance(new_token, Token):
@@ -252,19 +239,15 @@ class compiler(QDialog):
                     result = self.intermediate.step(new_token)
                     self.update_strings()
                     self.view_types_quadruples()
-                    #self.view_piles()
                     if isinstance(result, Error):
                         error = True
-                        #self.txt_error.appendPlainText(str(result))
                         print(result)
                         return
                 result = self.intermediate.step(token)
                 self.update_strings()
                 self.view_types_quadruples()
-                #self.view_piles()
                 if isinstance(result, Error):
                     error = True
-                    #self.txt_error.appendPlainText(str(result))
                     print(result)
                     return
 
