@@ -2,7 +2,6 @@ from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
-from .optimization import optimize_jumps, optimize_temporals
 from .compiler_int import compiler
 
 from typing import List, Dict
@@ -48,6 +47,7 @@ BRACKETSCLOSE: int = 132
 SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
+from .optimization import optimize_jumps, optimize_temporals
 
 ''' Lexical Errors
 

@@ -72,22 +72,22 @@ class Intermediate:
                 return type_2
             if type_1.value == type_2.value:
                 return
-        elif operator in nullary_operators:
+        elif operator in lilyac.nullary_operators:
             operation = lilyac.nullary_operators[operator]
             type_r = operation()
-        elif operator in special_operators:
+        elif operator in lilyac.special_operators:
             type_1 = self.get_type(result)
             if isinstance(type_1, Error):
                 return type_1
             operation = lilyac.special_operators[operator]
             type_r = operation(type_1)
-        elif operator in unary_operators:
+        elif operator in lilyac.unary_operators:
             type_1 = self.get_type(op1)
             if isinstance(type_1, Error):
                 return type_1
             operation = lilyac.unary_operators[operator]
             type_r = operation(type_1)
-        elif operator in binary_operators:
+        elif operator in lilyac.binary_operators:
             type_1 = self.get_type(op1)
             type_2 = self.get_type(op2)
             if isinstance(type_1, Error):

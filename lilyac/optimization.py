@@ -23,8 +23,10 @@ constants = [
 def optimize_jumps(quadruples: List):
     for q in quadruples[::-1]:
         if q[0] in jumps:
-            i = q[3]
-            if quadruples[i][0] == 'JI':
+            i = q[3].lexeme
+            if i == len(quadruples):
+                continue
+            elif quadruples[i][0] == 'JI':
                 # Replace chains of inconditional jumps
                 q[3] = quadruples[i][3]
     return quadruples
@@ -37,7 +39,7 @@ def optimize_temporals(quadruples: List):
         if q[0] == '=' and is_temporal(q[3]):
             # Assignment of temporal variable
             i = remove_temporal_assignment(quadruples, i)
-        elif is_temporal(q[1]) or is_temporal(q[2]):
+        elif (q[1] and q[2]) and (is_temporal(q[1]) or is_temporal(q[2])):
             # Use of temporal variable
             i = remove_temporal_use(quadruples, i)
         i += 1
@@ -55,9 +57,9 @@ def remove_temporal_assignment(quadruples: List, i: int):
     '''
 
     assert i >= 0
+    q = quadruples[i]
     assert is_temporal(q[3])
 
-    q = quadruples[i]
     j = search_temporal(quadruples, q[3])
     k = remove_temporal_use(quadruples, j)
 
@@ -90,7 +92,6 @@ def remove_temporal_use(quadruples: List, i: int):
     q = quadruples[i]
     # i: index of temporal variable use
     # j: index of temporal variable creation
-
     ''' First factor '''
     if is_temporal(q[1]):
         # Find the index of the quadruple
@@ -105,7 +106,6 @@ def remove_temporal_use(quadruples: List, i: int):
         q_k = quadruples[k]
         if can_evaluate(q_k):
             q[1] = evaluate_quadruple(q_k)
-            del quadruples[k]
             i -= 1
 
     ''' Second factor '''
@@ -137,7 +137,7 @@ def evaluate_quadruple(q):
         result = operator(op1)
     elif op in lilyac.binary_operators:
         assert is_constant(q[1]) and is_constant(q[2])
-        operator = lilyac.unary_operators[op]
+        operator = lilyac.binary_operators[op]
         op1 = get_value(q[1])
         op2 = get_value(q[2])
         result = operator(op1, op2)
@@ -146,22 +146,23 @@ def evaluate_quadruple(q):
 
     res_type = type(result)
     if res_type == int:
-        return Token(str(result), lilyac.INTEGER)
+        return Token(lilyac.INTEGER, str(result))
     elif res_type == float and 'e' in str(result):
-        return Token(str(result), lilyac.FLOATSCI)
+        return Token(lilyac.FLOATSCI, str(result))
     elif res_type == float:
-        return Token(str(result), lilyac.FLOAT)
+        return Token(lilyac.FLOAT, str(result))
     elif res_type == str and len(str(result)):
-        return Token(result, lilyac.CHARACTER)
+        return Token(lilyac.CHARACTER, result)
     elif res_type == str:
-        return Token(result, lilyac.STRING)
+        return Token(lilyac.STRING, result)
 
 
 def search_temporal(quadruples, temporal):
     ''' Returns the index of the quadruple where a temporal is created
     '''
     for k, q in enumerate(quadruples):
-        if q[3].lexeme == temporal.lexeme and q[0] != '=':
+        if (q[3] and type(q[3]) != int
+           and q[3].lexeme == temporal.lexeme and q[0] != '='):
             return k
 
 
@@ -174,7 +175,7 @@ def is_constant(factor):
 
 
 def can_evaluate(q):
-    return q[1] in constants and q[2] in constants
+    return q[1].grammeme in constants and q[2].grammeme in constants
 
 
 def get_value(token):
