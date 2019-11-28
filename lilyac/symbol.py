@@ -607,10 +607,10 @@ class SemanticAction(Symbol):
             )
         elif self.grammeme == lilyac._FILL_JUMP:
             instruction = im.jump_pile.pop()
-            im.quadruples[instruction][3] = im.counter
+            im.quadruples[instruction][3] = Token(lilyac.INTEGER, im.counter)
         elif self.grammeme == lilyac._FILL_JUMP_1:
             instruction = im.jump_pile.pop()
-            im.quadruples[instruction][3] = im.counter + 1
+            im.quadruples[instruction][3] = Token(lilyac.INTEGER, im.counter + 1)
         elif self.grammeme == lilyac._READWRITE:
             operator = im.operator_pile[-1]
             if (operator.grammeme == lilyac.RESERVED
