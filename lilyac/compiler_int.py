@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButt
 from PyQt5.QtCore import (QTimer, QEventLoop)
 import os
 import lilyac
-from lilyac import Lexer, Parser, Intermediate, Token, Error, optimize_jumps, optimize_temporals
+from lilyac import Lexer, Parser, Intermediate, Token, Error, optimize_jumps, optimize_temporals, Execution
 import time
 
 class compiler(QDialog):
@@ -16,7 +16,7 @@ class compiler(QDialog):
         self.setLayout(QHBoxLayout())
         self.layout().addLayout(self.head())
         self.layout().addLayout(self.code())
-        self.layout().addLayout(self.quadruples())
+        self.layout().addLayout(self.sh_quadruples())
         self.layout().addLayout(self.optimized_quadruples())
 
         self.stylesheet= """
@@ -127,21 +127,21 @@ class compiler(QDialog):
     def on_text_changed(self):
         self.data = self.txt_code.toPlainText() + ' '
 
-    def quadruples(self):
+    def sh_quadruples(self):
         lb_quadruples = QLabel("Quadruples")
         lb_quadruples.setObjectName('lb_quadruples')
         self.list_quad = QListWidget()
 
         lb_out = QLabel("Output")
         lb_out.setObjectName('lb_out')
-        self.txt_output = QPlainTextEdit()
-        self.txt_output.setReadOnly(True)
+        self.list_output = QListWidget()
+
 
         quad_layout = QVBoxLayout()
         quad_layout.addWidget(lb_quadruples)
         quad_layout.addWidget(self.list_quad)
         quad_layout.addWidget(lb_out)
-        quad_layout.addWidget(self.txt_output)
+        quad_layout.addWidget(self.list_output)
 
         return quad_layout
 
@@ -152,14 +152,13 @@ class compiler(QDialog):
 
         lb_opout = QLabel("Optimized output")
         lb_opout.setObjectName('lb_opout')
-        self.txt_opout = QPlainTextEdit()
-        self.txt_opout.setReadOnly(True)
+        self.list_opout = QListWidget()
 
         opquad_layout = QVBoxLayout()
         opquad_layout.addWidget(lb_opquadruples)
         opquad_layout.addWidget(self.list_opquad)
         opquad_layout.addWidget(lb_opout)
-        opquad_layout.addWidget(self.txt_opout)
+        opquad_layout.addWidget(self.list_opout)
 
         return opquad_layout
 
@@ -186,11 +185,10 @@ class compiler(QDialog):
                 data = f.write(saving_txt)
                 f.close()
 
-    def optimization(self, quadruples):
+    def optimization(self):
         self.quadruples = optimize_jumps(self.intermediate.quadruples)
         self.quadruples = optimize_temporals(self.quadruples)
         self.op_quad_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.quadruples)]
-        return self.op_quad_str
 
     def update_strings(self):
         self.quadruples_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.intermediate.quadruples)]
@@ -248,13 +246,32 @@ class compiler(QDialog):
                     error = True
                     print(result)
                     return
-        self.optimization(self.quadruples)
+        self.optimization()
         self.view_optimization()
 
-        
-    def go_to_execute(self):
-        pass
+    def execution(self):
+        execution_env = Execution(self.intermediate.quadruples, self.intermediate.symbols_table)
+        execution_env.execute()
+        self.execution_output = execution_env.output
 
+    def optimized_execution(self):
+        execution_env = Execution(self.quadruples, self.intermediate.symbols_table)
+        execution_env.execute()
+        self.execution_output_op = execution_env.output
+
+    def view_execution(self):
+        self.list_output.clear()
+        self.list_output.addItems([str(element) for element in self.execution_output])
+
+    def view_opexecution(self):
+        self.list_opout.clear()
+        self.list_opout.addItems([str(element) for element in self.execution_output_op])
+
+    def go_to_execute(self):
+        self.execution()
+        self.view_execution()
+        self.optimized_execution()
+        self.view_opexecution()
 
 def stringify_quadruple(quadruple, i):
     operator, op1, op2, result = quadruple
