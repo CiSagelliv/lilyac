@@ -2,7 +2,6 @@ from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
-from .optimization import optimize_jumps
 from .compiler_int import compiler
 
 from typing import List, Dict
@@ -48,6 +47,7 @@ BRACKETSCLOSE: int = 132
 SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
+from .optimization import optimize_jumps, optimize_temporals
 
 ''' Lexical Errors
 
@@ -623,4 +623,52 @@ derivations: Dict = {
         Token(RESERVED, 'enter'),
         SemanticAction(_ENTER),
     ],
+}
+
+
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
+special_operators = {
+    'write': Type.write,
+    'read': Type.read,
+}
+
+
+''' Operators whose quadruple are of the form:
+    [operator, None, None, result]
+'''
+nullary_operators = {
+    'JI': Type.JI,
+    'enter': Type.enter,
+}
+
+
+''' Operators whose quadruple are of the form:
+        [operator, op1, None, result]
+'''
+unary_operators = {
+    r'!': lambda x: not x,
+    'JF': Type.JF,
+    'JT': Type.JT,
+}
+
+
+''' Operators whose quadruple are of the form:
+    [operator, op1, op2, result]
+'''
+binary_operators = {
+    r'+': lambda x, y: x + y,
+    r'-': lambda x, y: x - y,
+    r'*': lambda x, y: x * y,
+    r'/': lambda x, y: x / y,
+    r'%': lambda x, y: x % y,
+    r'||': lambda x, y: x or y,
+    r'&&': lambda x, y: x and y,
+    r'<': lambda x, y: x < y,
+    r'<=': lambda x, y: x <= y,
+    r'>': lambda x, y: x > y,
+    r'>=': lambda x, y: x >= y,
+    r'==': lambda x, y: x == y,
+    r'!=': lambda x, y: x != y,
 }

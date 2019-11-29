@@ -1,4 +1,4 @@
-from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error, optimize_jumps
+from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error, optimize_jumps, optimize_temporals
 from PyQt5.QtWidgets import QApplication
 import sys
 import os
@@ -65,8 +65,10 @@ def compile(file):
                 print(result)
                 return
     print('Succesfully compiled')
-    print('Optimizing')
+    print('Optimizing jumps')
     quadruples = optimize_jumps(intermediate.quadruples)
+    print('Optimizing temporals')
+    quadruples = optimize_temporals(quadruples)
     print('Succesfully optimized')
     save_code(file, quadruples)
 
