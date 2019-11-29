@@ -48,6 +48,7 @@ SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
 from .optimization import optimize_jumps, optimize_temporals
+from .execution import Execution
 
 ''' Lexical Errors
 
@@ -572,7 +573,7 @@ derivations: Dict = {
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
-        SemanticAction(_GO_TO_TRUE),
+        SemanticAction(_GO_TO_FALSE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
         SemanticAction(_GO_TO_BACK),
@@ -627,7 +628,7 @@ derivations: Dict = {
 
 
 ''' Operators whose quadruple are of the form:
-        [operator, op1, None, result]
+        [operator, None, None, op]
 '''
 special_operators = {
     'write': Type.write,

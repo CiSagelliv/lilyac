@@ -2,9 +2,9 @@ import io.lye;
 import controles.lye;
  
 class miclase begin
-    def i as integer;
+    def a, b, i as integer;
 
     for (i = 1: 10)
-        read(i);
+        write(i);
     endfor;
 end

@@ -106,6 +106,7 @@ def remove_temporal_use(quadruples: List, i: int):
         q_k = quadruples[k]
         if can_evaluate(q_k):
             q[1] = evaluate_quadruple(q_k)
+            del quadruples[k]
             i -= 1
 
     ''' Second factor '''
@@ -188,3 +189,15 @@ def get_value(token):
         return token.lexeme
     elif token.grammeme == lilyac.STRING:
         return token.lexeme
+
+
+def is_temporal(factor):
+    return '.R' in factor.lexeme
+
+
+def is_constant(factor):
+    return factor.grammeme in constants
+
+
+def can_evaluate(q):
+    return q[1].grammeme in constants and q[2].grammeme in constants
