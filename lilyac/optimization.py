@@ -106,6 +106,7 @@ def remove_temporal_use(quadruples: List, i: int):
         q_k = quadruples[k]
         if can_evaluate(q_k):
             q[1] = evaluate_quadruple(q_k)
+            del quadruples[k]
             i -= 1
 
     ''' Second factor '''
