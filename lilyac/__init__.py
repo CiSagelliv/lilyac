@@ -2,6 +2,7 @@ from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
+from .execution import Execution
 from .compiler_int import compiler
 
 from typing import List, Dict
@@ -627,7 +628,7 @@ derivations: Dict = {
 
 
 ''' Operators whose quadruple are of the form:
-        [operator, op1, None, result]
+        [operator, None, None, op]
 '''
 special_operators = {
     'write': Type.write,
