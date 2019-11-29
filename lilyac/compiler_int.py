@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
 from PyQt5.QtCore import (QTimer, QEventLoop)
 import os
-from lilyac import Lexer, Parser, Intermediate, Token, Error
+import lilyac
+from lilyac import Lexer, Parser, Intermediate, Token, Error, optimize_jumps, optimize_temporals
 import time
-
 
 class compiler(QDialog):
     def __init__(self):
@@ -186,25 +186,23 @@ class compiler(QDialog):
                 data = f.write(saving_txt)
                 f.close()
 
-    def update_strings(self):
-        def stringify_quadruple(quadruple, i):
-            operator, op1, op2, result = quadruple
-            op1 = op1.lexeme if op1 else ''
-            op2 = op2.lexeme if op2 else ''
-            if result:
-                if isinstance(result, Token):
-                    result = result.lexeme
-            else:
-                result = ''
-            line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
-            return line
+    def optimization(self, quadruples):
+        self.quadruples = optimize_jumps(self.intermediate.quadruples)
+        self.quadruples = optimize_temporals(self.quadruples)
+        self.op_quad_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.quadruples)]
+        return self.op_quad_str
 
+    def update_strings(self):
         self.quadruples_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.intermediate.quadruples)]
         self.types = [f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
 
     def view_types_quadruples(self):
         self.list_quad.clear()
         self.list_quad.addItems(self.quadruples_str)
+
+    def view_optimization(self):
+        self.list_opquad.clear()
+        self.list_opquad.addItems(self.op_quad_str)
 
     def go_to_analyze(self):
         lexer = Lexer()
@@ -250,10 +248,25 @@ class compiler(QDialog):
                     error = True
                     print(result)
                     return
+        self.optimization(self.quadruples)
+        self.view_optimization()
 
+        
     def go_to_execute(self):
         pass
 
+
+def stringify_quadruple(quadruple, i):
+    operator, op1, op2, result = quadruple
+    op1 = op1.lexeme if op1 else ''
+    op2 = op2.lexeme if op2 else ''
+    if result:
+        if isinstance(result, Token):
+            result = result.lexeme
+    else:
+        result = ''
+    line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
+    return line
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
