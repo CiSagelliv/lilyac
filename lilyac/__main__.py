@@ -1,7 +1,8 @@
-from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error, optimize_jumps, optimize_temporals
+from lilyac import Lexer, Parser, Intermediate, compiler, Token, Error, optimize_jumps, optimize_temporals, Execution
 from PyQt5.QtWidgets import QApplication
 import sys
 import os
+import time
 
 
 def main():
@@ -71,6 +72,17 @@ def compile(file):
     quadruples = optimize_temporals(quadruples)
     print('Succesfully optimized')
     save_code(file, quadruples)
+
+    start_time = time.time()
+    execution_env = Execution(intermediate.quadruples, intermediate.symbols_table)
+    execution_env.execute()
+    print('Tiempo ejecución: ', time.time() - start_time)
+
+    start_time = time.time()
+    execution_env = Execution(quadruples, intermediate.symbols_table)
+    execution_env.execute()
+    print('Tiempo ejecución: ', time.time() - start_time)
+    print(execution_env.output)
 
 
 def save_code(file, quadruples):

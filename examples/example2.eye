@@ -3,11 +3,10 @@ import controles.lye;
  
 class miclase
 begin
-def A,B, ready as integer;
+def A,B, ready, res as integer;
  
 write("Hola Mundo!!");
     enter;
-    read (A,B);
-    res = A + B;
+    res = 15 + 5;
     write ("Resultado = ", res);
 end

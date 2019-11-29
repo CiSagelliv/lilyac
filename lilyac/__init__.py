@@ -2,7 +2,6 @@ from .symbol import Symbol, Token, Error, SemanticAction, Type
 from .lexer import Lexer
 from .parser import Parser
 from .intermediate import Intermediate
-from .execution import Execution
 from .compiler_int import compiler
 
 from typing import List, Dict
@@ -49,6 +48,7 @@ SQUAREBOPEN: int = 133
 SQUAREBCLOSE: int = 134
 
 from .optimization import optimize_jumps, optimize_temporals
+from .execution import Execution
 
 ''' Lexical Errors
 
@@ -573,7 +573,7 @@ derivations: Dict = {
         Token(PARENTHESISOPEN, '('),
         Symbol(EXPRESSION_0),
         Token(PARENTHESISCLOSE, ')'),
-        SemanticAction(_GO_TO_TRUE),
+        SemanticAction(_GO_TO_FALSE),
         Symbol(STATEMENTS),
         Token(RESERVED, 'endwhile'),
         SemanticAction(_GO_TO_BACK),
