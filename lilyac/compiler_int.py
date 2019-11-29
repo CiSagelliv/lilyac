@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit, QPushButton, QMessageBox, QHBoxLayout, QVBoxLayout, QPlainTextEdit, QFileDialog, QListWidget, QListWidgetItem)
 from PyQt5.QtCore import (QTimer, QEventLoop)
 import os
-from lilyac import Lexer, Parser, Intermediate, Token, Error
+import lilyac
+from lilyac import Lexer, Parser, Intermediate, Token, Error, optimize_jumps, optimize_temporals, Execution
 import time
-
 
 class compiler(QDialog):
     def __init__(self):
@@ -16,9 +16,8 @@ class compiler(QDialog):
         self.setLayout(QHBoxLayout())
         self.layout().addLayout(self.head())
         self.layout().addLayout(self.code())
-        self.layout().addLayout(self.quadruples())
-        self.layout().addLayout(self.factor_pile())
-        self.layout().addLayout(self.production_pile())
+        self.layout().addLayout(self.sh_quadruples())
+        self.layout().addLayout(self.optimized_quadruples())
 
         self.stylesheet= """
         QDialog{
@@ -41,7 +40,7 @@ class compiler(QDialog):
             background-color: #57A99A
         }
 
-        QPushButton#despacito{
+        QPushButton#Execute{
             background-color: #57A99A
         }
 
@@ -57,37 +56,19 @@ class compiler(QDialog):
             color: green;
         }
 
-        QLabel#lb_error{
+        QLabel#lb_out{
             font-family: "Times New Roman", Times, serif;
             font-size: 20px;
             color: green;
         }
 
-        QLabel#lb_factor{
+        QLabel#lb_opquad{
             font-family: "Times New Roman", Times, serif;
             font-size: 20px;
             color: green;
         }
 
-        QLabel#lb_operator{
-            font-family: "Times New Roman", Times, serif;
-            font-size: 20px;
-            color: green;
-        }
-
-        QLabel#production_pile{
-            font-family: "Times New Roman", Times, serif;
-            font-size: 20px;
-            color: green;
-        }
-
-        QLabel#jump_pile{
-            font-family: "Times New Roman", Times, serif;
-            font-size: 20px;
-            color: green;
-        }
-
-        QLabel#lb_type{
+        QLabel#lb_opout{
             font-family: "Times New Roman", Times, serif;
             font-size: 20px;
             color: green;
@@ -118,16 +99,16 @@ class compiler(QDialog):
         btn_analyze_code.setObjectName('analyze_code')
         btn_analyze_code.clicked.connect(self.go_to_analyze)
 
-        btn_analyze_despacito = QPushButton('Analyze despacito', self)
-        btn_analyze_despacito.setObjectName('despacito')
-        btn_analyze_despacito.clicked.connect(self.go_to_despacito)
+        btn_execute = QPushButton('Execute', self)
+        btn_execute.setObjectName('Execute')
+        btn_execute.clicked.connect(self.go_to_execute)
 
         head_layout = QVBoxLayout()
         head_layout.addWidget(btn_open_file)
         head_layout.addWidget(btn_edit_text)
         head_layout.addWidget(btn_save_changes)
         head_layout.addWidget(btn_analyze_code)
-        head_layout.addWidget(btn_analyze_despacito)
+        head_layout.addWidget(btn_execute)
 
         return head_layout
 
@@ -146,65 +127,40 @@ class compiler(QDialog):
     def on_text_changed(self):
         self.data = self.txt_code.toPlainText() + ' '
 
-    def quadruples(self):
+    def sh_quadruples(self):
         lb_quadruples = QLabel("Quadruples")
         lb_quadruples.setObjectName('lb_quadruples')
-        #self.txt_quad = QPlainTextEdit()
         self.list_quad = QListWidget()
 
+        lb_out = QLabel("Output")
+        lb_out.setObjectName('lb_out')
+        self.list_output = QListWidget()
 
-        lb_type = QLabel("Symbol")
-        lb_type.setObjectName('lb_type')
-        self.list_type = QListWidget()
-
-        lb_error = QLabel("Error")
-        lb_error.setObjectName('lb_error')
-        self.txt_error = QPlainTextEdit()
-        self.txt_error.setReadOnly(True)
 
         quad_layout = QVBoxLayout()
         quad_layout.addWidget(lb_quadruples)
         quad_layout.addWidget(self.list_quad)
-        quad_layout.addWidget(lb_type)
-        quad_layout.addWidget(self.list_type)
-        quad_layout.addWidget(lb_error)
-        quad_layout.addWidget(self.txt_error)
+        quad_layout.addWidget(lb_out)
+        quad_layout.addWidget(self.list_output)
 
         return quad_layout
 
-    def factor_pile(self):
-        lb_factor = QLabel("factor_pile")
-        lb_factor.setObjectName('lb_factor')
-        self.list_factor = QListWidget()
+    def optimized_quadruples(self):
+        lb_opquadruples = QLabel("Optimized quadruples")
+        lb_opquadruples.setObjectName('lb_opquad')
+        self.list_opquad = QListWidget()
 
-        lb_operator = QLabel("operator_pile")
-        lb_operator.setObjectName('lb_operator')
-        self.list_operator = QListWidget()
+        lb_opout = QLabel("Optimized output")
+        lb_opout.setObjectName('lb_opout')
+        self.list_opout = QListWidget()
 
-        factor_layout = QVBoxLayout()
-        factor_layout.addWidget(lb_factor)
-        factor_layout.addWidget(self.list_factor)
-        factor_layout.addWidget(lb_operator)
-        factor_layout.addWidget(self.list_operator)
+        opquad_layout = QVBoxLayout()
+        opquad_layout.addWidget(lb_opquadruples)
+        opquad_layout.addWidget(self.list_opquad)
+        opquad_layout.addWidget(lb_opout)
+        opquad_layout.addWidget(self.list_opout)
 
-        return factor_layout
-
-    def production_pile(self):
-        lb_production = QLabel("production_pile")
-        lb_production.setObjectName('production_pile')
-        self.list_production = QListWidget()
-
-        lb_jump = QLabel("jump_pile")
-        lb_jump.setObjectName('jump_pile')
-        self.list_jump = QListWidget()
-
-        production_layout = QVBoxLayout()
-        production_layout.addWidget(lb_production)
-        production_layout.addWidget(self.list_production)
-        production_layout.addWidget(lb_jump)
-        production_layout.addWidget(self.list_jump)
-
-        return production_layout
+        return opquad_layout
 
     def go_to_open(self):
         self.txt_code.setReadOnly(True)
@@ -229,43 +185,24 @@ class compiler(QDialog):
                 data = f.write(saving_txt)
                 f.close()
 
-    def update_strings(self):
-        def stringify_quadruple(quadruple, i):
-            operator, op1, op2, result = quadruple
-            op1 = op1.lexeme if op1 else ''
-            op2 = op2.lexeme if op2 else ''
-            if result:
-                if isinstance(result, Token):
-                    result = result.lexeme
-            else:
-                result = ''
-            line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
-            return line
+    def optimization(self):
+        self.quadruples = optimize_jumps(self.intermediate.quadruples)
+        self.quadruples = optimize_temporals(self.quadruples)
+        self.op_quad_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.quadruples)]
 
-        self.factor_pile_str = [str(factor) for factor in self.intermediate.factor_pile]
-        self.production_pile_str = [str(token) for token in self.parser.symbols]
-        self.operator_pile_str = [str(token) for token in self.intermediate.operator_pile]
+    def update_strings(self):
         self.quadruples_str = [stringify_quadruple(quadruple, i) for i, quadruple in enumerate(self.intermediate.quadruples)]
-        self.jump_pile_str = [str(jump) for jump in self.intermediate.jump_pile]
         self.types = [f'{symbol}:{self.intermediate.symbols_table[symbol]}' for symbol in self.intermediate.symbols_table]
 
     def view_types_quadruples(self):
-        self.list_type.clear()
-        self.list_type.addItems(self.types)
         self.list_quad.clear()
         self.list_quad.addItems(self.quadruples_str)
 
-    def view_piles(self):
-        self.list_factor.clear()
-        self.list_factor.addItems(self.factor_pile_str)
-        self.list_operator.clear()
-        self.list_operator.addItems(self.operator_pile_str)
-        self.list_jump.clear()
-        self.list_jump.addItems(self.jump_pile_str)
-
+    def view_optimization(self):
+        self.list_opquad.clear()
+        self.list_opquad.addItems(self.op_quad_str)
 
     def go_to_analyze(self):
-        self.txt_error.clear()
         lexer = Lexer()
         self.parser = Parser()
         self.intermediate = Intermediate()
@@ -276,7 +213,6 @@ class compiler(QDialog):
                 result = self.intermediate.step(action)
                 self.update_strings()
                 self.view_types_quadruples()
-                self.view_piles()
                 if isinstance(result, Error):
                     self.txt_error.appendPlainText(str(result))
                     print(result)
@@ -285,18 +221,13 @@ class compiler(QDialog):
                 token, i = lexer.generate_token(i, self.data)
                 if isinstance(token, Error):
                     error = True
-                    #self.txt_error.appendPlainText(token)
-                    self.txt_error.appendPlainText(str(token))
                     print(token)
                     return
                 while True:
                     new_token = self.parser.step(token)
                     production_pile_str = [str(token) for token in self.parser.symbols]
-                    self.list_production.clear()
-                    self.list_production.addItems(production_pile_str)
                     if isinstance(new_token, Error):
                         error = True
-                        self.txt_error.appendPlainText(str(new_token))
                         print(new_token)
                         return
                     elif isinstance(new_token, Token):
@@ -304,86 +235,55 @@ class compiler(QDialog):
                     result = self.intermediate.step(new_token)
                     self.update_strings()
                     self.view_types_quadruples()
-                    self.view_piles()
                     if isinstance(result, Error):
                         error = True
-                        self.txt_error.appendPlainText(str(result))
                         print(result)
                         return
                 result = self.intermediate.step(token)
                 self.update_strings()
                 self.view_types_quadruples()
-                self.view_piles()
                 if isinstance(result, Error):
                     error = True
-                    self.txt_error.appendPlainText(str(result))
                     print(result)
                     return
+        self.optimization()
+        self.view_optimization()
 
-    def go_to_despacito(self):
-        self.txt_error.clear()
-        lexer = Lexer()
-        self.parser = Parser()
-        self.intermediate = Intermediate()
-        i = 0
-        while i < len(self.data) and len(self.parser.symbols) > 0:
-            if self.parser.is_semantic_action():
-                action = self.parser.symbols.pop()
-                result = self.intermediate.step(action)
-                self.update_strings()
-                loop = QEventLoop()
-                QTimer.singleShot(1000, loop.quit)
-                loop.exec_()
-                self.view_types_quadruples()
-                self.view_piles()
-                if isinstance(result, Error):
-                    self.txt_error.appendPlainText(str(result))
-                    print(result)
-                    return
-            else:
-                token, i = lexer.generate_token(i, self.data)
-                if isinstance(token, Error):
-                    error = True
-                    self.txt_error.appendPlainText(token)
-                    self.txt_error.appendPlainText(str(token))
-                    print(token)
-                    return
-                while True:
-                    new_token = self.parser.step(token)
-                    production_pile_str = [str(token) for token in self.parser.symbols]
-                    self.list_production.clear()
-                    self.list_production.addItems(production_pile_str)
-                    if isinstance(new_token, Error):
-                        error = True
-                        self.txt_error.appendPlainText(str(new_token))
-                        print(new_token)
-                        return
-                    elif isinstance(new_token, Token):
-                        break
-                    result = self.intermediate.step(new_token)
-                    self.update_strings()
-                    loop = QEventLoop()
-                    QTimer.singleShot(1000, loop.quit)
-                    loop.exec_()
-                    self.view_types_quadruples()
-                    self.view_piles()
-                    if isinstance(result, Error):
-                        error = True
-                        self.txt_error.appendPlainText(str(result))
-                        print(result)
-                        return
-                result = self.intermediate.step(token)
-                self.update_strings()
-                loop = QEventLoop()
-                QTimer.singleShot(1000, loop.quit)
-                loop.exec_()
-                self.view_types_quadruples()
-                self.view_piles()
-                if isinstance(result, Error):
-                    error = True
-                    self.txt_error.appendPlainText(str(result))
-                    print(result)
-                    return
+    def execution(self):
+        execution_env = Execution(self.intermediate.quadruples, self.intermediate.symbols_table)
+        execution_env.execute()
+        self.execution_output = execution_env.output
+
+    def optimized_execution(self):
+        execution_env = Execution(self.quadruples, self.intermediate.symbols_table)
+        execution_env.execute()
+        self.execution_output_op = execution_env.output
+
+    def view_execution(self):
+        self.list_output.clear()
+        self.list_output.addItems([str(element) for element in self.execution_output])
+
+    def view_opexecution(self):
+        self.list_opout.clear()
+        self.list_opout.addItems([str(element) for element in self.execution_output_op])
+
+    def go_to_execute(self):
+        self.execution()
+        self.view_execution()
+        self.optimized_execution()
+        self.view_opexecution()
+
+def stringify_quadruple(quadruple, i):
+    operator, op1, op2, result = quadruple
+    op1 = op1.lexeme if op1 else ''
+    op2 = op2.lexeme if op2 else ''
+    if result:
+        if isinstance(result, Token):
+            result = result.lexeme
+    else:
+        result = ''
+    line = f'{i}: {operator}\t{op1}\t{op2}\t{result}\n'
+    return line
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
